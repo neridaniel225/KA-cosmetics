@@ -492,6 +492,27 @@ select.mf-input option{background:#111;color:#fff}
 #pmVoiceRow .vc-listen{display:flex;align-items:center;justify-content:center}
 .pm-det summary{cursor:pointer;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:.7rem 0;border-top:1px solid var(--w3)}
 .pm-det div{font-size:.74rem;color:var(--g6);line-height:1.8;padding:0 0 .8rem}
+#vaFab{position:fixed;left:14px;bottom:14px;z-index:640;display:flex;align-items:center;gap:8px;padding:13px 18px;border:none;border-radius:40px;background:var(--red);color:var(--k);font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.28)}
+#vaFab .mic-ico{margin:0;width:22px;height:22px}
+@media(max-width:520px){#vaFab{padding:14px;bottom:76px}#vaFab span{display:none}}
+#vaSheet{display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:.6rem}
+#vaSheet .va-box{position:relative;background:#fff;width:100%;max-width:480px;max-height:97vh;overflow:auto;padding:1.1rem 1rem;text-align:center;border-top:4px solid var(--red)}
+#vaSheet .vs-x{position:absolute;top:6px;right:10px;background:none;border:none;font-size:1.5rem;cursor:pointer}
+.va-title{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+#vaMic{width:84px;height:84px;margin:.2rem auto}
+#vaMic .mic-ico{width:40px;height:40px;margin:0}
+.va-type{display:flex;gap:6px;margin:.3rem 0 .6rem}.va-type input{flex:1;padding:12px;border:1.5px solid var(--w3);font-size:.9rem;min-width:0}.va-type button{padding:0 16px;border:none;background:var(--k);color:#fff;font-weight:800;cursor:pointer}
+.va-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:.3rem 0}.va-chip-t{width:100%;font-size:.75rem;font-weight:800;color:var(--g5)}
+.va-chip{padding:10px 12px;border:2px solid var(--k);background:#fff;font-weight:800;font-size:.85rem;cursor:pointer}
+.va-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--w3);text-align:left}
+.va-row img,.va-noimg{width:46px;height:56px;object-fit:cover;background:var(--w2);flex-shrink:0;display:block}
+.va-nm{flex:1;min-width:0;font-size:.85rem;display:flex;flex-direction:column;gap:2px}.va-nm select{font-size:.8rem;padding:3px;max-width:130px}.va-pr{font-size:.75rem;color:var(--g5)}
+.va-q{display:flex;align-items:center}.va-q button{width:34px;height:38px;border:1.5px solid var(--k);background:#fff;font-size:1.2rem;cursor:pointer}.va-q input{width:54px;height:38px;text-align:center;border:1.5px solid var(--k);border-left:0;border-right:0;font-weight:800}
+.va-del{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--g5)}.va-empty{padding:.8rem;font-size:.85rem;color:var(--g5)}
+#vaForm{text-align:left}#vaForm label{display:block;font-size:.8rem;font-weight:800;margin:.7rem 0 .3rem}#vaForm input{width:100%;padding:14px;font-size:1.05rem;border:2px solid var(--k);box-sizing:border-box}
+#vaSheet .vs-actions{margin-top:.6rem}#vaSheet .vs-actions button:disabled{opacity:.4}
+.va-inline{display:inline-flex;align-items:center;gap:8px;margin:1rem 0 0;padding:12px 20px;border:2px solid var(--k);background:var(--red);color:var(--k);font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.va-inline .mic-ico{margin:0}
 #vsOrder{display:none;text-align:left}
 #vsOrder label{display:block;font-size:.8rem;font-weight:800;margin:.8rem 0 .3rem}
 #vsOrder input{width:100%;padding:16px 14px;font-size:1.1rem;border:2px solid var(--k);box-sizing:border-box}
@@ -501,6 +522,25 @@ select.mf-input option{background:#111;color:#fff}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<button id="vaFab" onclick="vaOpen()" aria-label="Commander à la voix"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
+<div id="vaSheet" role="dialog" aria-label="Commande vocale"><div class="va-box">
+  <button class="vs-x" onclick="vaClose()" aria-label="Fermer">✕</button>
+  <div class="va-title">Commande vocale</div>
+  <div id="vaSay" class="vs-state"></div>
+  <button id="vaMic" class="vs-mic" onclick="vaMicTap()" aria-label="Parler"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg></button>
+  <div id="vaHeard" class="vs-heard"></div>
+  <div class="va-type"><input id="vaType" type="text" placeholder="Ou écris ici (ex : 2 savon noir et 1 huile)" onkeydown="if(event.key==='Enter')vaTypeSubmit()"/><button onclick="vaTypeSubmit()">OK</button></div>
+  <div id="vaChips" class="va-chips"></div>
+  <div id="vaBasket"></div>
+  <div id="vaTotal" class="vs-total"></div>
+  <div id="vaForm" style="display:none">
+    <label for="vaNom">Ton nom</label><input id="vaNom" type="text" autocomplete="name" oninput="vaField('name',this.value)"/>
+    <label for="vaTel">Ton numéro de téléphone</label><input id="vaTel" type="tel" autocomplete="tel" oninput="vaField('tel',this.value)"/>
+    <label for="vaLieu">Lieu de livraison</label><input id="vaLieu" type="text" autocomplete="street-address" oninput="vaField('lieu',this.value)"/>
+    <div class="vs-note">💵 Tu paies quand tu reçois ta commande.</div>
+  </div>
+  <div id="vaActions" class="vs-actions"></div>
+</div></div>
 <div id="voiceSheet" role="dialog" aria-label="Commande vocale"><div class="vs-box">
   <button class="vs-x" onclick="voiceClose()" aria-label="Fermer">✕</button>
   <img id="vsImg" alt=""/>
@@ -661,6 +701,7 @@ select.mf-input option{background:#111;color:#fff}
   </div>
 
   <!-- FLASH BAR -->
+  <div style="text-align:center;padding:0 1rem" class="va-inline-wrap"><button class="va-inline" onclick="vaOpen()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>Commander à la voix</button></div>
   <div class="flash-bar" id="flashBar">
     <div class="si"><div class="fb-in">
       <div class="fb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Livraison Rapide</div>
@@ -703,6 +744,7 @@ select.mf-input option{background:#111;color:#fff}
     <div class="si">
       <div class="cat-pg-brand shop-n">KA Cosmetics</div>
       <div class="cat-pg-title" id="catTitle">HOMME</div>
+      <button class="va-inline" onclick="vaOpen()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>Commander à la voix</button>
       <div class="cat-pg-sub" id="catSub">Pour ceux qui vivent dans l'ombre</div>
     </div>
   </div>
@@ -956,7 +998,7 @@ select.mf-input option{background:#111;color:#fff}
         </div>
         <!-- Commande vocale (pour ceux qui ne lisent pas) -->
         <div id="pmVoiceRow" style="display:flex;gap:.5rem;margin-bottom:.8rem">
-          <button class="vc-main" onclick="voiceStart()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg> Commander à la voix</button>
+          <button class="vc-main" onclick="vaOpen({prod:pmCurrentProd})"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg> Commander à la voix</button>
           <button class="vc-listen" onclick="voiceReadProduct()" aria-label="Écouter le produit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a10 10 0 010 14"/></svg></button>
         </div>
         <!-- Qty + Add -->
@@ -1309,6 +1351,7 @@ function renderNewDrop(){
 }
 function renderCatalog(cat,filter,sort){
   filter=filter||"all";
+  window.CUR_GFILTER=filter.startsWith("G:")?filter.slice(2):null;
   let base=PRODS.filter(p=>p.active!==false&&p.cat===cat);
   let data=base;
   if(filter==="NEW") data=data.filter(p=>p.badge==="NEW");
@@ -1535,7 +1578,7 @@ async function uploadVoiceClips(orderId){
         url=sb.storage.from('voice-orders').getPublicUrl(path).data.publicUrl;
       }catch(e){console.warn('Audio non envoyé:',e);}
     }
-    out.push({product_id:c.id,name:c.name,qty:c.qty,format:c.size,url,transcript:v.transcript||''});
+    out.push({product_id:c.id,name:v.label||c.name,qty:v.label?cart.reduce((a,x)=>a+x.qty,0):c.qty,format:v.label?'':c.size,url,transcript:v.transcript||''});
   }
   return out;
 }
@@ -2051,6 +2094,575 @@ function voiceClose(){
   document.getElementById('voiceSheet').style.display='none';
 }
 
+
+// ═══ ASSISTANT VOCAL — une seule conversation pour tout commander (produits, nom, numéro, lieu) ═══
+// Le client parle : « la gamme White Up, je veux le lait et l'huile » → les produits sont reconnus, ajoutés, puis
+// l'assistant demande le nom, le numéro (qu'il répète pour vérifier), le lieu de livraison, et envoie la commande.
+const VA={open:false,phase:'order',basket:[],gamme:null,cat:null,name:'',tel:'',lieu:'',turns:[],pend:[],last:null,noHear:0,retried:false,restart:false,listening:false,rec:null,media:null,stream:null,chunks:[],mime:'',blob:null,err:'',sending:false,maxT:null,say:0,phoneFail:0,telOk:false,offer:null,lastQ:'',recP:null};
+const VA_STOP=new Set('le la les l un une des de du d au aux et ou pour avec sans en je veux voudrais voulez prendre prends ajoute ajouter ajoutez mets mettre met donne donnez moi me encore aussi gamme produit produits svp stp s il te vous plait merci bonjour salut ca c est cest tout toi mon ma mes ton ta tes x fois'.split(' '));
+const vaStem=w=>w.replace(/[sx]$/,'');
+function vaTokMatch(a,b){a=vaStem(a);b=vaStem(b);if(a===b)return true;const m=Math.min(a.length,b.length);if(m>=4&&(a.startsWith(b)||b.startsWith(a)))return true;return m>=4&&_vDist(a,b)<=(Math.max(a.length,b.length)>=7?2:1);}
+const vaIsNumTok=w=>/^\d+$/.test(w)||(w in _VW)||w==='cent'||w==='cents'||w==='mille';
+const vaYes=n=>/\b(oui|ouais|ok|okay|d accord|c est bon|c est ca|c est correct|exact|exactement|correct|envoie|envoyer|envoyez|valide|valider|confirme|confirmer|vas y|allez y|parfait|bien sur|yes)\b/.test(n);
+const vaNo=n=>/\b(non|pas|faux|erreur|recommence|change|modifier|corrige|incorrect|mauvais)\b/.test(n);
+const vaDone=n=>/(commande|panier) (est |c est )?(bon|bonne|complet|complete|fini|finie|termine|terminee|prete|ok)|tout est bon|c est bon maintenant|on peut (envoyer|valider)|(valide|envoie|envoyer|valider) (ma |la )?commande|\b(c est tout|c est fini|c est bon|termine|termin|fini|finis|rien d autre|rien|non merci|voila|valide|valider|passer|suivant|j ai fini|ca sera tout|ca suffit|ca sera bon|stop)\b/.test(n);
+const $va=id=>document.getElementById(id);
+function vaStock(p,size){const v=(p.stock||{})[size];return (v===undefined||v===null)?null:+v;}
+function vaLabel(it){return it.qty+' '+it.name+(it.many&&it.size?' '+it.size:'');}
+function vaTotal(){return VA.basket.reduce((a,i)=>a+i.price*i.qty,0);}
+// ── parole (synthèse) : le micro ne s'ouvre qu'une fois la phrase terminée ──
+function vaSay(txt,next){
+  const id=++VA.say;$va('vaSay').textContent=txt;
+  let done=false;const fin=()=>{if(done||id!==VA.say)return;done=true;clearTimeout(tm);if(VA.open&&next)next();};
+  const tm=setTimeout(fin,Math.min(22000,2500+txt.length*105));
+  try{
+    if(!('speechSynthesis' in window)){fin();return;}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(txt);u.lang='fr-FR';u.rate=.95;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);
+  }catch(e){fin();}
+}
+const vaAsk=(txt)=>{VA.lastQ=txt;vaSay(txt,()=>vaListen());};
+// ── enregistrement audio de toute la conversation ──
+async function vaRecStart(){
+  VA.chunks=[];VA.blob=null;VA.media=null;
+  try{
+    if(!navigator.mediaDevices||!window.MediaRecorder)return;
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});VA.stream=stream;
+    const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+    const m=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);VA.mime=m.mimeType||mt||'audio/webm';
+    m.ondataavailable=e=>{if(e.data&&e.data.size)VA.chunks.push(e.data);};
+    m.start(2000);VA.media=m;
+  }catch(e){VA.media=null;VA.err=(e&&e.name)||'';}
+}
+function vaRecStop(){
+  return new Promise(res=>{
+    const m=VA.media;
+    const fin=()=>{try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(e){}VA.stream=null;if(VA.chunks.length)VA.blob=new Blob(VA.chunks,{type:VA.mime||'audio/webm'});res();};
+    if(m&&m.state!=='inactive'){m.onstop=fin;try{m.stop();}catch(e){fin();}}else fin();
+  });
+}
+// ── écoute (reconnaissance vocale) ──
+function vaMic(on){const b=$va('vaMic');if(b)b.classList.toggle('on',!!on);}
+async function vaListen(){
+  if(!VA.open||VA.listening)return;
+  VA.listening=true;try{await VA.recP;}catch(e){}VA.listening=false;
+  if(!VA.open||VA.listening)return;
+  if(!_SR){$va('vaSay').textContent='Ton téléphone ne comprend pas la voix ici (essaie Chrome). Écris ta demande dans la case, ou utilise les boutons.';return;}
+  try{speechSynthesis.cancel();VA.say++;}catch(e){}
+  VA.listening=true;vaMic(true);$va('vaSay').textContent='🎤 Je t\'écoute…';
+  const r=new _SR();VA.rec=r;r.lang='fr-FR';r.interimResults=false;r.maxAlternatives=3;
+  let got=null;
+  r.onresult=e=>{const a=[];for(let k=0;k<e.results[0].length;k++){let t='';for(let i=0;i<e.results.length;i++)t+=' '+(e.results[i][k]||e.results[i][0]).transcript;a.push(t.trim());}got=a;};
+  r.onerror=e=>{
+    VA.err=e.error||'';
+    if(e.error==='audio-capture'&&VA.media&&!VA.retried){VA.retried=true;VA.restart=true;}
+  };
+  r.onend=async()=>{
+    clearTimeout(VA.maxT);VA.listening=false;vaMic(false);
+    if(VA.restart){VA.restart=false;try{VA.media&&VA.media.state!=='inactive'&&(VA.media.onstop=null,VA.media.stop());}catch(e){}try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(e){}VA.media=null;VA.chunks=[];VA.blob=null;setTimeout(vaListen,300);return;}
+    if(!VA.open)return;
+    if(got)vaHandle(got);else vaNoSpeech();
+  };
+  clearTimeout(VA.maxT);VA.maxT=setTimeout(()=>{try{r.stop();}catch(e){}},14000);
+  try{r.start();}catch(e){VA.listening=false;vaMic(false);}
+}
+function vaMicTap(){
+  if(VA.listening){try{VA.rec&&VA.rec.stop();}catch(e){}return;}
+  VA.noHear=0;vaListen();
+}
+function vaNoSpeech(){
+  if(VA.err==='not-allowed'||VA.err==='service-not-allowed'||VA.err==='NotAllowedError'){$va('vaSay').textContent='Autorise le micro dans ton navigateur, puis appuie sur le micro. Tu peux aussi écrire dans la case.';return;}
+  VA.noHear++;
+  if(VA.noHear>=2){$va('vaSay').textContent='Je ne t\'entends pas. Appuie sur le micro et parle, ou écris dans la case.';return;}
+  vaAsk('Je n\'ai rien entendu. Redis-le, s\'il te plaît.');
+}
+function vaTypeSubmit(){const i=$va('vaType');const t=(i.value||'').trim();if(!t)return;i.value='';VA.noHear=0;vaHandle([t]);}
+// ── ouverture / fermeture ──
+async function vaOpen(opts){
+  opts=opts||{};
+  if(VA.open||window.__voiceOff)return;
+  Object.assign(VA,{open:true,phase:'order',basket:[],gamme:null,cat:null,name:'',tel:'',lieu:'',turns:[],pend:[],last:null,noHear:0,retried:false,restart:false,listening:false,sending:false,err:'',phoneFail:0,telOk:false,offer:null,lastQ:''});
+  const pc=$va('page-catalog');
+  if(pc&&pc.classList.contains('active')){VA.cat=currentCat||null;VA.gamme=window.CUR_GFILTER||null;}
+  $va('vaSheet').style.display='flex';$va('vaHeard').textContent='';
+  const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  if(opts.prod){vaAddItem(opts.prod,'',R,pmSelectedSize);}
+  vaRender();
+  // un seul clic : le navigateur demande lui-même l'autorisation du micro, on n'ajoute aucune étape
+  VA.recP=vaRecStart();
+  try{fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.llm===false)VA_LLM_OFF=true;}).catch(()=>{});}catch(e){}
+  const ex=PRODS.filter(p=>p.active!==false).slice(0,2).map((p,i)=>(i?'et un ':'deux ')+p.name).join(' ');
+  if(opts.prod&&VA.basket.length)vaAsk('J\'ai mis '+opts.prod.name+'. Combien en veux-tu ? Tu peux aussi ajouter d\'autres produits.');
+  else vaAsk('Dis-moi ce que tu veux.'+(ex?' Par exemple : '+ex+'.':'')+' Tu peux aussi dire le nom d\'une gamme.');
+}
+async function vaClose(){
+  if(!VA.open)return;VA.open=false;VA.say++;
+  try{VA.rec&&VA.rec.abort();}catch(e){}clearTimeout(VA.maxT);VA.listening=false;vaMic(false);
+  try{speechSynthesis.cancel();}catch(e){}
+  try{if(VA.media&&VA.media.state!=='inactive'){VA.media.onstop=null;VA.media.stop();}}catch(e){}
+  try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(e){}VA.stream=null;
+  $va('vaSheet').style.display='none';
+}
+// ── reconnaissance des produits ──
+function vaScore(p,toks,ctx){
+  const nameT=_vNorm(p.name).split(' ').filter(w=>w.length>=3&&!VA_STOP.has(w));
+  const g=SITE_GAMMES.find(x=>x.id===p.gamme),c=SITE_CATS.find(x=>x.id===p.cat);
+  const extra=[g?g.name:'',p.brand||'',c?c.name:''].join(' ');
+  const extraT=_vNorm(extra).split(' ').filter(w=>w.length>=3&&!VA_STOP.has(w));
+  let hit=0,nh=0;
+  toks.forEach(t=>{if(nameT.some(n=>vaTokMatch(t,n))){hit++;nh++;}else if(extraT.some(n=>vaTokMatch(t,n)))hit++;});
+  if(!hit)return null;
+  const cov=hit/toks.length,frac=nameT.length?nh/nameT.length:0;
+  let sc=cov+.4*frac;
+  if(ctx.gamme&&p.gamme===ctx.gamme)sc+=.6;
+  if(ctx.cat&&p.cat===ctx.cat)sc+=.15;
+  return {p,sc,cov};
+}
+function vaFindProducts(toks,ctx,only){
+  const pool=PRODS.filter(p=>p.active!==false&&(!only||only.includes(p.id)));
+  const list=pool.map(p=>vaScore(p,toks,ctx)).filter(x=>x&&x.cov>=.5).sort((a,b)=>b.sc-a.sc);
+  if(!list.length)return null;
+  const top=list[0],ties=list.filter(x=>x.sc>=top.sc-.05);
+  return ties.length>1?{amb:ties.slice(0,4).map(x=>x.p)}:{p:top.p};
+}
+function vaFindGamme(n){
+  const words=n.split(' ').filter(Boolean);
+  let best=null;
+  SITE_GAMMES.forEach(g=>{
+    const gt=_vNorm(g.name).split(' ').filter(w=>w.length>=3&&!VA_STOP.has(w));
+    if(!gt.length)return;
+    const used=gt.map(t=>words.find(w=>vaTokMatch(w,t)));
+    if(used.every(Boolean)&&(!best||gt.length>best.gt.length))best={g,gt,used};
+  });
+  return best;
+}
+function vaSegments(piece){
+  const toks=_vNorm(piece).split(' ').filter(Boolean);const segs=[];let cur=[],has=false,prevNum=false;
+  for(let i=0;i<toks.length;i++){
+    const w=toks[i],num=vaIsNumTok(w);
+    if(num&&!prevNum&&has){
+      let j=i;while(j+1<toks.length&&vaIsNumTok(toks[j+1]))j++;
+      const nxt=toks[j+1],prev=toks[i-1];
+      const isUnit=nxt&&_UNITS.test(nxt),afterDe=prev==='de'||prev==='d';
+      if(!isUnit&&!afterDe){segs.push(cur.join(' '));cur=[];has=false;}
+    }
+    cur.push(w);prevNum=num;
+    if(!num&&!VA_STOP.has(w)&&!_UNITS.test(w)&&w.length>=3)has=true;
+  }
+  if(cur.length)segs.push(cur.join(' '));
+  return segs;
+}
+function vaSegToks(seg,skip){
+  return seg.split(' ').filter(w=>w&&w.length>=3&&!vaIsNumTok(w)&&!_UNITS.test(w)&&!VA_STOP.has(w)&&!(skip||[]).some(s=>vaTokMatch(w,s)));
+}
+function vaAddItem(p,seg,R,sizeHint,qtyHint){
+  const res=seg?voiceParse(seg,p):{qty:null,size:null};
+  const sizes=(p.sizes||[]).map(String);
+  let size=res.size||(sizeHint?(sizes.find(s=>_vNorm(s)===_vNorm(sizeHint))||''):'')||sizes.find(s=>{const v=vaStock(p,s);return v===null||v>0;})||sizes[0]||'';
+  const st=vaStock(p,size);
+  if(st!==null&&st<=0){R.out.push(p.name+(sizes.length>1?' '+size:''));return null;}
+  let qty=Math.max(1,res.qty||qtyHint||1);
+  const ex=VA.basket.find(i=>i.id===p.id&&i.size===size);
+  const mx=st!==null?st:100000;
+  if(qty+(ex?ex.qty:0)>mx){qty=Math.max(0,mx-(ex?ex.qty:0));R.notes.push('Pour '+p.name+', il n\'en reste que '+mx);if(qty<=0)return null;}
+  let it;
+  if(ex){ex.qty+=qty;it=ex;}else{it={id:p.id,name:p.name,price:p.price,img:getProdImg(p)||'',size,qty,many:sizes.length>1};VA.basket.push(it);}
+  VA.last=it;R.added.push(vaLabel({...it,qty}));
+  return it;
+}
+function vaProcess(text,R){
+  const n0=_vNorm(text);
+  const ctx={gamme:VA.gamme,cat:VA.cat};
+  const gm=vaFindGamme(n0);
+  let skip=[];
+  if(gm){VA.gamme=gm.g.id;ctx.gamme=gm.g.id;R.gamme=gm.g;skip=gm.gt;}
+  const pieces=text.split(/[,;.]|\s+(?:et|puis|ensuite|aussi|plus|avec)\s+/i);
+  pieces.forEach(piece=>{
+    const pn=_vNorm(piece);if(!pn)return;
+    if(/^(enleve|enlever|retire|retirer|supprime|supprimer|annule|annuler|efface)\b/.test(pn)){
+      const toks=vaSegToks(pn,skip);
+      const it=VA.basket.find(i=>{const p=PRODS.find(x=>x.id===i.id);const r=p&&vaScore(p,toks,{});return r&&r.cov>=.5;});
+      if(it){VA.basket=VA.basket.filter(x=>x!==it);if(VA.last===it)VA.last=null;R.removed.push(it.name);}
+      return;
+    }
+    vaSegments(pn).forEach(seg=>{
+      const toks=vaSegToks(seg,skip);
+      if(!toks.length){
+        // « 3 » tout seul : change la quantité du dernier produit
+        if(VA.last&&vaNumOnly(seg)){
+          const p=PRODS.find(x=>x.id===VA.last.id);const res=voiceParse(seg,p);
+          if(res.size)VA.last.size=res.size;
+          if(res.qty){const st=vaStock(p,VA.last.size);VA.last.qty=Math.min(res.qty,st!==null&&st>0?st:100000);}
+          R.changed.push(vaLabel(VA.last));
+        }
+        return;
+      }
+      const f=vaFindProducts(toks,ctx);
+      if(!f){R.unknown.push(toks.join(' '));return;}
+      if(f.amb){VA.pend.push({ids:f.amb.map(p=>p.id),seg});return;}
+      vaAddItem(f.p,seg,R);
+    });
+  });
+  return vaDone(n0);
+}
+function vaNumOnly(seg){return seg.split(' ').some(vaIsNumTok);}
+const vaOrd={premier:0,premiere:0,un:0,deuxieme:1,second:1,seconde:1,deux:1,troisieme:2,trois:2,quatrieme:3,quatre:3,dernier:-1,derniere:-1};
+function vaSummary(R){
+  const parts=[];
+  if(R.added.length)parts.push('J\'ai ajouté : '+R.added.join(', ')+'.');
+  if(R.changed.length)parts.push('Modifié : '+R.changed.join(', ')+'.');
+  if(R.removed.length)parts.push('J\'ai retiré '+R.removed.join(', ')+'.');
+  if(R.out.length)parts.push(R.out.join(', ')+(R.out.length>1?' sont en rupture.':' est en rupture.'));
+  if(R.notes.length)parts.push(R.notes.join('. ')+'.');
+  if(R.unknown.length)parts.push('Je n\'ai pas trouvé : '+R.unknown.join(', ')+'.');
+  return parts.join(' ');
+}
+function vaChoose(id){
+  const cur=VA.pend[0];if(!cur)return;
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+  const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  VA.pend.shift();vaAddItem(p,cur.seg,R);vaRender();
+  if(VA.pend.length){const c=VA.pend[0];vaAsk(vaSummary(R)+' Lequel veux-tu : '+c.ids.map(i=>PRODS.find(x=>x.id===i).name).join(', ')+' ?');}
+  else vaAsk((vaSummary(R)||'D\'accord.')+' Autre chose ?');
+}
+function vaTapAdd(id){
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+  const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  vaAddItem(p,'',R);vaRender();$va('vaSay').textContent=vaSummary(R)||'';
+}
+// ── nom, numéro, lieu ──
+function vaGoName(prefix){VA.phase='name';vaRender();vaAsk((prefix?prefix+' ':'')+'Quel est ton nom ?');}
+function vaCleanName(t){
+  let s=t.replace(/^\s*(bonjour|salut)[, ]*/i,'').replace(/^\s*(je m'?appelle|je me nomme|mon nom (c'?est|est)|mon nom|moi c'?est|c'?est|je suis|ici)\s+/i,'').replace(/[.!?,]+$/,'').trim();
+  return s.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+}
+function vaCleanLieu(t){
+  let s=t.replace(/^\s*(je suis|je veux (?:etre |être )?livr[ée]e?|livre[zr]?[- ]?moi|c'?est|ça sera|ca sera|à livrer|a livrer|livraison)\s*/i,'').replace(/^(?:à|a|au|aux|en|vers|dans|chez)\s+/i,m=>/^chez/i.test(m)?m:'').replace(/[.!?]+$/,'').trim();
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+function vaPhone(text){
+  const t=_vNorm(text.replace(/(\d)[\s.\-](?=\d)/g,'$1')).split(' ').filter(Boolean);
+  const U={un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,sept:7,huit:8,neuf:9};
+  const TEEN={dix:10,onze:11,douze:12,treize:13,quatorze:14,quinze:15,seize:16};
+  const TENS={vingt:20,trente:30,quarante:40,cinquante:50,soixante:60};
+  let out='',i=0;
+  const teen=()=>{const w=t[i];if(w in TEEN){i++;return TEEN[w];}if(w==='dix'){i++;return 10;}return null;};
+  while(i<t.length){
+    const w=t[i];
+    if(/^\d+$/.test(w)){out+=w;i++;continue;}
+    if(w==='zero'){out+='0';i++;continue;}
+    if(w==='quatre'&&(t[i+1]==='vingt'||t[i+1]==='vingts')){
+      let v=80;i+=2;
+      if(t[i]==='dix'){v=90;i++;if(t[i] in U&&U[t[i]]>=7){v+=U[t[i]];i++;}}
+      else if(t[i] in TEEN){v+=TEEN[t[i]];i++;}
+      else if(t[i] in U){v+=U[t[i]];i++;}
+      out+=String(v);continue;
+    }
+    if(w in TENS){
+      let v=TENS[w];i++;if(t[i]==='et')i++;
+      if(w==='soixante'&&(t[i]==='dix'||t[i] in TEEN)){v+=(t[i]==='dix'?10:TEEN[t[i]]);i++;if(t[i] in U&&U[t[i]]>=7){v+=U[t[i]];i++;}}
+      else if(t[i] in U){v+=U[t[i]];i++;}
+      out+=String(v);continue;
+    }
+    if(w==='dix'||w in TEEN){let v=w==='dix'?10:TEEN[w];i++;if(v===10&&t[i] in U&&U[t[i]]>=7){v+=U[t[i]];i++;}out+=String(v);continue;}
+    if(w in U){out+=String(U[w]);i++;continue;}
+    i++;
+  }
+  if(out.length===13&&out.startsWith('225'))out=out.slice(3);
+  return out;
+}
+const vaPairs=d=>(d.match(/.{1,2}/g)||[]).join(', ');
+// ── compréhension de la phrase : ChatGPT (via ton serveur) si disponible, sinon règles locales ──
+let VA_LLM_OFF=false;
+const NLU_SERVER='https://server-kacosmetics.onrender.com'; // ton serveur Render (même adresse que pour les paiements)
+const QSTOP=new Set('est ce que qu il y a ya avez vous as tu combien prix coute cout disponible stock reste restes cher francs fcfa dites dis savoir voir svp moi aussi encore'.split(' '));
+function vaCatalog(){
+  return PRODS.filter(p=>p.active!==false).slice(0,250).map(p=>{
+    const g=SITE_GAMMES.find(x=>x.id===p.gamme),sz=(p.sizes||[]).map(String);
+    return {id:p.id,n:p.name,g:g?g.name:'',p:Math.round(p.price),s:sz,o:sz.filter(s=>{const v=vaStock(p,s);return v!==null&&v<=0;})};
+  });
+}
+async function vaLLM(text,alts){
+  if(VA_LLM_OFF)return null;
+  const g=SITE_GAMMES.find(x=>x.id===VA.gamme);
+  const body={utterance:text,alts:(alts||[]).slice(1,3),phase:VA.phase,question:VA.lastQ||'',
+    basket:VA.basket.map(i=>({id:i.id,name:i.name,size:i.size,qty:i.qty})),name:VA.name,phone:VA.tel,phone_confirmed:!!VA.telOk,lieu:VA.lieu,
+    gamme:g?g.name:'',offer:VA.offer?{id:VA.offer.id,name:VA.offer.name}:null,history:VA.turns.slice(-6),catalog:vaCatalog(),shop:(typeof SHOP_NAME!=='undefined'&&SHOP_NAME)||'KA Cosmetics'};
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),7000);
+  try{
+    const r=await fetch(NLU_SERVER+'/api/voice-nlu',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctl.signal});
+    if(r.status===501||r.status===404){VA_LLM_OFF=true;return null;}
+    if(!r.ok)return null;
+    return vaFromLLM(await r.json());
+  }catch(e){return null;}finally{clearTimeout(to);}
+}
+function vaFromLLM(j){
+  if(!j||typeof j!=='object')return null;
+  const P=id=>PRODS.find(p=>String(p.id)===String(id));
+  const I={R:null,ops:{adds:[],removes:[],setQty:[]},name:'',tel:'',lieu:'',redo:null,finish:!!j.finish,yes:!!j.yes,no:!!j.no,answer:'',offer:null,llm:true};
+  (j.add||[]).forEach(a=>{const p=P(a&&a.id);if(p)I.ops.adds.push({p,size:a.size?String(a.size):'',qty:Math.max(1,parseInt(a.qty,10)||1)});});
+  (j.remove||[]).forEach(id=>{const p=P(id);if(p)I.ops.removes.push(p.id);});
+  (j.set_qty||[]).forEach(a=>{const p=P(a&&a.id);if(p&&parseInt(a.qty,10)>0)I.ops.setQty.push({id:p.id,qty:parseInt(a.qty,10)});});
+  if(typeof j.name==='string')I.name=j.name.trim();
+  if(j.phone!=null)I.tel=String(j.phone).replace(/\D/g,'');
+  if(typeof j.lieu==='string')I.lieu=j.lieu.trim();
+  if(['name','phone','lieu','order'].includes(j.redo))I.redo=j.redo;
+  if(typeof j.say==='string')I.answer=j.say.trim().slice(0,400);
+  if(j.offer_id!=null)I.offer=P(j.offer_id)||null;
+  return I;
+}
+// ── questions : « est-ce qu'il y a du molato ? », « c'est combien l'huile ? » ──
+function vaQuestion(text,n){
+  const isQ=/\b(est ce que|est ce qu|il y a|y a t il|ya|vous avez|avez vous|tu as|as tu|combien|prix|ca coute|coute|disponible|en stock|il reste|quelles?|qu est ce que)\b/.test(n);
+  if(!isQ)return null;
+  if(/\b(je veux|je voudrais|ajoute|rajoute|mets|donne moi)\b/.test(n)&&!/\b(est ce que|combien|prix)\b/.test(n))return null;
+  const ctx={gamme:VA.gamme,cat:VA.cat};
+  const toks=n.split(' ').filter(w=>w.length>=3&&!vaIsNumTok(w)&&!VA_STOP.has(w)&&!QSTOP.has(w));
+  const gm=vaFindGamme(n);
+  const list=ps=>ps.slice(0,5).map(p=>p.name).join(', ');
+  const priceOf=p=>{const sz=(p.sizes||[]).map(String);return Math.round(p.price)+' francs'+(sz.length>1?', en '+sz.join(' ou '):'');};
+  if(gm){
+    const ps=PRODS.filter(p=>p.active!==false&&p.gamme===gm.g.id);VA.gamme=gm.g.id;
+    if(ps.length)return {text:'Dans la gamme '+gm.g.name+', il y a : '+list(ps)+'. Qu\'est-ce que tu veux ?'};
+  }
+  if(toks.length){
+    const f=vaFindProducts(toks,ctx);
+    if(f&&f.p){
+      const p=f.p,sz=(p.sizes||[]).map(String),avail=sz.filter(s=>{const v=vaStock(p,s);return v===null||v>0;});
+      if(sz.length&&!avail.length)return {text:'Désolé, '+p.name+' est en rupture pour le moment.'};
+      VA.offer=p;
+      return {text:'Oui, nous avons '+p.name+'. Prix : '+priceOf(p)+'. Tu en veux combien ?'};
+    }
+    if(f&&f.amb){VA.pend.push({ids:f.amb.map(p=>p.id),seg:''});return {text:'Nous avons : '+f.amb.map(p=>p.name).join(', ')+'. Lequel veux-tu ?'};}
+    const cat=SITE_CATS.find(c=>_vNorm(c.name).split(' ').some(w=>w.length>=3&&toks.some(t=>vaTokMatch(t,w))));
+    if(cat){const ps=PRODS.filter(p=>p.active!==false&&p.cat===cat.id);if(ps.length)return {text:'Pour '+cat.name+', nous avons : '+list(ps)+'. Lequel veux-tu ?'};}
+    return {text:'Je ne trouve pas ça dans la boutique. Nous avons par exemple : '+list(PRODS.filter(p=>p.active!==false))+'.'};
+  }
+  return null;
+}
+// ── règles locales (marche sans internet ni clé ChatGPT) ──
+function vaRuleIntent(text){
+  const n=_vNorm(text),phase=VA.phase;
+  const I={R:null,name:'',tel:'',lieu:'',redo:null,finish:false,yes:false,no:false,answer:'',offer:null};
+  if(VA.pend.length){ // le client choisit parmi les propositions
+    const cur=VA.pend[0];
+    const ord=n.split(' ').map(w=>vaOrd[w]).find(v=>v!==undefined);
+    const f=vaFindProducts(vaSegToks(n,[]),{},cur.ids);
+    const pick=(f&&f.p)||(ord!==undefined?PRODS.find(p=>p.id===cur.ids[ord<0?cur.ids.length-1:ord]):null);
+    if(pick){VA.pend.shift();const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};vaAddItem(pick,cur.seg,R);I.R=R;I.finish=vaDone(n)&&!VA.pend.length;return I;}
+    if(vaNo(n)){VA.pend.shift();return I;}
+    VA.pend=[];
+  }
+  const corr=/\b(trompe|trompes|erreur|faux|incorrect|mauvais|corrige|corriger|change|changer|modifie|modifier|redemande|recommence|refais|rectifie)\b|pas (bon|bonne|ca|correct|juste)\b/.test(n);
+  let target=null;
+  if(/\b(nom|appelle|prenom)\b/.test(n))target='name';
+  else if(/\b(numero|telephone|tel|chiffres?|contact)\b/.test(n))target='phone';
+  else if(/\b(lieu|adresse|livraison|quartier|endroit|commune)\b/.test(n))target='lieu';
+  else if(/\b(commande|produits?|panier|article)\b/.test(n))target='order';
+  if(corr&&target)I.redo=target;
+  // valeurs données spontanément
+  const mName=text.match(/(?:mon nom (?:c'?est|est)|je m'?appelle|moi c'?est)\s+(.+)$/i)||((phase==='name'||I.redo==='name')&&text.match(/(?:je suis|c'?est)\s+(?!(?:à|a|au|aux|dans|vers|chez|en)\s)(.+)$/i));
+  const bad=v=>/^(pas|faux|incorrect|mauvais|bon|bonne|ça|ca)\b|\b(lieu|adresse|nom|numero|numéro|erreur|faux)\b/i.test(v||'');
+  if(mName&&!bad(mName[1]))I.name=vaCleanName(mName[1]);
+  const mLieu=text.match(/(?:livre[zr]?[- ]?moi|je veux (?:être |etre )?livr[ée]e?|je suis (?:à|a|au|aux|dans|vers)|mon adresse (?:c'?est|est)|l'?adresse (?:c'?est|est)|je suis chez)\s*(?:à|a|au|aux|dans|vers)?\s*(.+)$/i)||(I.redo==='lieu'&&text.match(/c'?est\s+(?:à|a|au|aux|dans)?\s*(.+)$/i));
+  if(mLieu&&!bad(mLieu[1]))I.lieu=vaCleanLieu(mLieu[1]);
+  if((target==='phone'||/\b(numero|telephone|contact)\b/.test(n)||phase==='phone')){const d=vaPhone(text);if(d.length>=8)I.tel=d;}
+  // l'assistant venait de parler d'un produit : « oui », « oui 2 » = je le prends
+  const hasNew=I.name||I.lieu||I.tel;
+  if(VA.offer&&!hasNew&&!I.redo&&phase==='order'&&(vaYes(n)||/^\d+$|^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\b/.test(n.replace(/^oui /,'')))&&!vaFindProducts(vaSegToks(n,[]),{})){
+    const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+    vaAddItem(VA.offer,n.replace(/^oui /,''),R);VA.offer=null;I.R=R;return I;
+  }
+  const q=(!hasNew&&!I.redo)?vaQuestion(text,n):null;
+  if(q){I.answer=q.text;return I;}
+  const ordWords=/\b(ajoute|rajoute|mets|mettre|enleve|retire|supprime|aussi|encore)\b/.test(n);
+  if(!hasNew&&!I.redo&&(phase==='order'||phase==='final'||phase==='fix'||ordWords)){
+    const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+    const fin=vaProcess(text,R);
+    if(R.added.length||R.changed.length||R.removed.length||R.out.length||R.notes.length||R.unknown.length||R.gamme||VA.pend.length)I.R=R;
+    I.finish=fin;
+  }else I.finish=vaDone(n);
+  I.no=vaNo(n)&&!I.redo&&!I.finish;
+  if(phase==='order'&&/^non( merci)?$/.test(n)){I.finish=true;I.no=false;}
+  I.yes=vaYes(n)&&!I.no;
+  return I;
+}
+const vaTitle=s=>String(s||'').trim().split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+function vaFirst(){return (VA.name||'').split(' ')[0]||'';}
+function vaRepeatQ(){vaAsk('Je n\'ai pas bien compris. '+(VA.lastQ||'Dis-moi ce que tu veux.'));}
+// ── applique ce que le client a dit, puis pose la bonne question suivante ──
+async function vaHandle(alts){
+  const text=(alts[0]||'').trim();if(!text){vaNoSpeech();return;}
+  VA.noHear=0;VA.turns.push(text);$va('vaHeard').textContent='« '+text+' »';$va('vaSay').textContent='…';
+  let I=await vaLLM(text,alts);
+  if(!VA.open)return;
+  if(!I)I=vaRuleIntent(text);
+  vaApply(I,text,alts);
+}
+function vaApply(I,text,alts){
+  const R=I.R||{added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  const phase=VA.phase;
+  let fieldSet=false;
+  if(I.offer)VA.offer=I.offer;
+  if(I.name){VA.name=vaTitle(I.name);fieldSet=true;}
+  if(I.tel){const d=I.tel.length===13&&I.tel.startsWith('225')?I.tel.slice(3):I.tel;if(d.length===10){VA.tel=d;VA.telOk=false;fieldSet=true;}else I.badTel=d.length;}
+  if(I.lieu){VA.lieu=I.lieu;fieldSet=true;}
+  if(I.ops){
+    I.ops.adds.forEach(a=>vaAddItem(a.p,'',R,a.size,a.qty));
+    I.ops.removes.forEach(id=>{const it=VA.basket.find(x=>x.id===id);if(it){VA.basket=VA.basket.filter(x=>x!==it);if(VA.last===it)VA.last=null;R.removed.push(it.name);}});
+    I.ops.setQty.forEach(a=>{const it=VA.basket.find(x=>x.id===a.id);if(it){const p=PRODS.find(x=>x.id===a.id),st=p?vaStock(p,it.size):null;it.qty=Math.min(a.qty,st!==null&&st>0?st:100000);VA.last=it;R.changed.push(vaLabel(it));}});
+    if(I.offer&&I.ops.adds.length)VA.offer=null;
+  }
+  const basketChanged=!!(R.added.length||R.changed.length||R.removed.length);
+  if(basketChanged)VA.offer=null;
+  vaRender();
+  const sum=vaSummary(R);
+  // 1) « tu t'es trompé sur mon nom » : on redemande
+  let redo=I.redo;
+  if((redo==='name'&&I.name)||(redo==='phone'&&I.tel&&!I.badTel)||(redo==='lieu'&&I.lieu))redo=null;
+  if(redo==='name'){VA.name='';VA.phase='name';vaRender();vaAsk('Pardon, on recommence. Quel est ton nom ?');return;}
+  if(redo==='phone'){VA.tel='';VA.telOk=false;VA.phase='phone';vaRender();vaAsk('Pardon. Redis-moi ton numéro de téléphone, doucement.');return;}
+  if(redo==='lieu'){VA.lieu='';VA.phase='lieu';vaRender();vaAsk('Pardon. Où faut-il te livrer ? Dis le quartier ou la commune.');return;}
+  if(redo==='order'){VA.phase='order';vaRender();vaAsk((sum?sum+' ':'')+'D\'accord. Dis ce que tu veux ajouter ou retirer, ou dis : c\'est tout.');return;}
+  // 2) plusieurs produits possibles : on demande lequel
+  if(VA.pend.length){
+    const c=VA.pend[0],names=c.ids.map(id=>PRODS.find(p=>p.id===id).name);
+    vaRender();vaAsk(I.answer||((sum?sum+' ':'')+'Lequel veux-tu : '+names.join(', ')+' ?'));return;
+  }
+  if(I.badTel!==undefined){VA.phase='phone';vaRender();vaAsk('Je compte '+I.badTel+' chiffre'+(I.badTel>1?'s':'')+' et il en faut dix. Redis ton numéro lentement, ou écris-le dans la case.');return;}
+  const yes=I.yes||I.finish,no=I.no;
+  const changed=fieldSet||basketChanged;
+  if(!changed){
+    if(phase==='phoneok'){
+      if(yes){VA.telOk=true;vaAdvance('Parfait.');return;}
+      if(no){VA.tel='';VA.telOk=false;VA.phase='phone';vaRender();vaAsk('D\'accord. Redis ton numéro, chiffre par chiffre.');return;}
+    }
+    if(phase==='final'){
+      if(yes){vaSend();return;}
+      if(no){VA.phase='fix';vaRender();vaAsk('D\'accord. Qu\'est-ce que tu veux changer : le nom, le numéro, le lieu ou les produits ?');return;}
+    }
+    if(phase==='order'&&yes&&!I.answer){
+      if(!VA.basket.length){vaAsk('Ton panier est vide. Dis-moi ce que tu veux.');return;}
+      vaAdvance('D\'accord.');return;
+    }
+    if(phase==='fix'&&yes){vaAdvance('D\'accord.');return;}
+    if(I.answer){vaAsk(I.answer);return;}
+    if(R.gamme&&phase==='order'){
+      const ps=PRODS.filter(p=>p.active!==false&&p.gamme===R.gamme.id).slice(0,3).map(p=>p.name);
+      vaAsk('Gamme '+R.gamme.name+'. Dis-moi les produits que tu veux'+(ps.length?', par exemple : '+ps.join(', ')+'.':'.'));return;
+    }
+    // une valeur attendue sans phrase particulière
+    if(phase==='name'){VA.name=vaCleanName(text);vaAdvance('Merci '+vaFirst()+'.');return;}
+    if(phase==='lieu'){VA.lieu=vaCleanLieu(text);vaAdvance();return;}
+    if(phase==='phone'||phase==='phoneok'){
+      const d=vaPhone(alts&&alts.find(a=>vaPhone(a).length===10)||text);
+      if(d.length===10){VA.tel=d;VA.telOk=false;vaAdvance();return;}
+      vaAsk('Je compte '+d.length+' chiffre'+(d.length>1?'s':'')+' et il en faut dix. Redis ton numéro lentement, ou écris-le dans la case.');return;
+    }
+    if(sum){vaAsk(sum+' Autre chose ?');return;}
+    if(phase==='order'){vaAsk('Je n\'ai pas compris. Dis par exemple : deux '+((PRODS.find(p=>p.active!==false)||{}).name||'savon')+'.');return;}
+    vaRepeatQ();return;
+  }
+  // quelque chose a changé
+  const pre=((I.answer?I.answer+' ':'')+sum).trim()||(fieldSet?'C\'est noté.':'');
+  if(phase==='order'&&!I.finish){vaAsk((pre?pre+' ':'')+'Autre chose ?');return;}
+  vaAdvance(pre);
+}
+function vaAdvance(prefix){
+  const pre=prefix?prefix+' ':'';
+  if(!VA.basket.length){VA.phase='order';vaRender();vaAsk(pre+'Ton panier est vide. Dis-moi ce que tu veux.');return;}
+  if(!VA.name){VA.phase='name';vaRender();vaAsk(pre+'Quel est ton nom ?');return;}
+  if(!VA.tel){VA.phase='phone';vaRender();vaAsk(pre+'Dis-moi ton numéro de téléphone.');return;}
+  if(!VA.telOk){VA.phase='phoneok';vaRender();vaAsk(pre+'Ton numéro est : '+vaPairs(VA.tel)+'. C\'est bien ça ?');return;}
+  if(!VA.lieu){VA.phase='lieu';vaRender();vaAsk(pre+'Où faut-il te livrer ? Dis le quartier ou la commune.');return;}
+  VA.phase='final';vaRender();vaFinalAsk(prefix);
+}
+function vaFinalAsk(prefix){
+  const lines=VA.basket.map(vaLabel).join(', ');
+  vaAsk((prefix?prefix+' ':'')+vaFirst()+', tu commandes : '+lines+'. Total : '+Math.round(vaTotal())+' francs. Livraison à '+VA.lieu+', numéro '+vaPairs(VA.tel)+'. Tu paies à la livraison. J\'envoie la commande ?');
+}
+
+// ── affichage ──
+function vaRender(){
+  const b=$va('vaBasket');
+  b.innerHTML=VA.basket.map((it,i)=>`<div class="va-row">
+    ${it.img?`<img src="${it.img.replace(/"/g,'&quot;')}" alt="" onerror="this.style.visibility='hidden'"/>`:'<span class="va-noimg"></span>'}
+    <div class="va-nm"><b>${it.name}</b>${it.many?`<select onchange="vaSize(${i},this.value)">${((PRODS.find(p=>p.id===it.id)||{}).sizes||[]).map(s=>`<option${String(s)===String(it.size)?' selected':''}>${s}</option>`).join('')}</select>`:''}<span class="va-pr">${FMT(it.price*it.qty)}</span></div>
+    <div class="va-q"><button onclick="vaQty(${i},-1)">−</button><input type="number" min="1" value="${it.qty}" onchange="vaSetQty(${i},this.value)"/><button onclick="vaQty(${i},1)">+</button></div>
+    <button class="va-del" onclick="vaDel(${i})" aria-label="Retirer">✕</button></div>`).join('')||'<div class="va-empty">Ton panier vocal est vide.</div>';
+  $va('vaTotal').textContent=VA.basket.length?'Total : '+FMT(vaTotal()):'';
+  // choix : produits d'une gamme, ou propositions quand plusieurs produits correspondent
+  let chips='';
+  if(VA.pend.length)chips='<div class="va-chip-t">Choisis :</div>'+VA.pend[0].ids.map(id=>{const p=PRODS.find(x=>x.id===id);return `<button class="va-chip" onclick="vaChoose(${typeof id==='number'?id:`'${id}'`})">${p.name}</button>`;}).join('');
+  else if(VA.gamme&&VA.phase==='order'){const g=SITE_GAMMES.find(x=>x.id===VA.gamme);const ps=PRODS.filter(p=>p.active!==false&&p.gamme===VA.gamme);if(g&&ps.length)chips=`<div class="va-chip-t">Gamme ${g.name} :</div>`+ps.map(p=>`<button class="va-chip" onclick="vaTapAdd(${typeof p.id==='number'?p.id:`'${p.id}'`})">+ ${p.name}</button>`).join('');}
+  $va('vaChips').innerHTML=chips;
+  const delivery=VA.phase!=='order';
+  $va('vaForm').style.display=delivery?'block':'none';
+  if(delivery){[['vaNom',VA.name],['vaTel',VA.tel],['vaLieu',VA.lieu]].forEach(([id,v])=>{const e=$va(id);if(e&&document.activeElement!==e)e.value=v;});}
+  const a=$va('vaActions');
+  if(VA.phase==='order')a.innerHTML=`<button class="vs-no" onclick="vaToCart()" ${VA.basket.length?'':'disabled'}>🛒 Au panier</button><button class="vs-yes" onclick="vaFinishOrder()" ${VA.basket.length?'':'disabled'}>✓ C'est tout</button>`;
+  else a.innerHTML=`<button class="vs-no" onclick="VA.phase='order';vaRender();vaAsk('Dis ce que tu veux ajouter ou retirer.')">← Ma commande</button><button class="vs-yes" onclick="vaSendBtn()">✓ Envoyer</button>`;
+}
+function vaFinishOrder(){if(!VA.basket.length)return;try{speechSynthesis.cancel();}catch(e){}VA.say++;try{VA.rec&&VA.rec.abort();}catch(e){}VA.listening=false;vaMic(false);vaAdvance('D\'accord.');}
+function vaQty(i,d){const it=VA.basket[i];if(!it)return;vaSetQty(i,it.qty+d);}
+function vaSetQty(i,v){
+  const it=VA.basket[i];if(!it)return;const p=PRODS.find(x=>x.id===it.id);const st=p?vaStock(p,it.size):null;
+  let n=Math.max(1,parseInt(v,10)||1);if(st!==null&&st>0)n=Math.min(n,st);it.qty=n;vaRender();
+}
+function vaSize(i,s){const it=VA.basket[i];if(!it)return;it.size=s;const p=PRODS.find(x=>x.id===it.id);const st=p?vaStock(p,s):null;if(st!==null&&st>0)it.qty=Math.min(it.qty,st);vaRender();}
+function vaDel(i){const it=VA.basket[i];VA.basket.splice(i,1);if(VA.last===it)VA.last=null;vaRender();}
+function vaField(k,v){VA[k]=v;if(k==='tel')VA.telOk=true;}
+function vaToCart(){
+  if(!VA.basket.length)return;
+  let n=0;
+  VA.basket.forEach(it=>{
+    const p=PRODS.find(x=>x.id===it.id);const st=p?vaStock(p,it.size):null;
+    const ex=cart.find(c=>c.id===it.id&&c.size===it.size);
+    let q=it.qty;if(st!==null&&st>0)q=Math.min(q,Math.max(0,st-(ex?ex.qty:0)));
+    if(q<=0)return;
+    if(ex)ex.qty+=q;else cart.push({id:it.id,name:it.name,price:it.price,img:it.img||'',qty:q,size:it.size});
+    n+=q;
+  });
+  saveCart();updateCartUI();vaClose();toast(n+' article(s) ajouté(s) au panier');
+}
+function vaSendBtn(){
+  const nom=(VA.name||'').trim(),tel=(VA.tel||'').replace(/\D/g,''),lieu=(VA.lieu||'').trim();
+  if(!VA.basket.length){toast('Ton panier est vide');return;}
+  if(nom.length<2){toast('Écris ton nom');$va('vaNom').focus();return;}
+  if(tel.length<8){toast('Écris ton numéro de téléphone');$va('vaTel').focus();return;}
+  if(lieu.length<3){toast('Écris où te livrer');$va('vaLieu').focus();return;}
+  vaSend();
+}
+async function vaSend(){
+  if(VA.sending)return;VA.sending=true;
+  try{speechSynthesis.cancel();VA.say++;}catch(e){}
+  try{VA.rec&&VA.rec.abort();}catch(e){}
+  $va('vaSay').textContent='Envoi de ta commande…';
+  await vaRecStop();
+  const saved=cart;
+  const items=VA.basket.map(it=>({id:it.id,name:it.name,price:it.price,img:it.img||'',qty:it.qty,size:it.size}));
+  if(VA.blob||VA.turns.length){
+    const key='v'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    VOICE_CLIPS[key]={blob:VA.blob,mime:VA.mime,transcript:VA.turns.map(t=>'Client : '+t).join('\n'),label:'Commande vocale complète ('+items.length+' produit'+(items.length>1?'s':'')+')'};
+    items[0].clip=key;
+  }
+  cart=items;
+  const nom=VA.name.trim(),tel=VA.tel.replace(/\D/g,''),lieu=VA.lieu.trim();
+  let ok=false;
+  try{ok=await submitOrder({nom,tel,lieu},null);}catch(e){console.error(e);}
+  VA.sending=false;
+  if(ok){
+    cart=saved;saveCart();updateCartUI();
+    try{localStorage.setItem('pu_cust',JSON.stringify({nom,tel,lieu}));}catch(e){}
+    await vaClose();closeProdModal();nav('confirm');
+    voiceSpeak('Merci '+nom.split(' ')[0]+' ! Ta commande est envoyée. On t\'appelle bientôt. Tu paies à la livraison.');
+  }else{
+    cart=saved;saveCart();updateCartUI();
+    // le micro a été coupé : on garde la commande à l'écran pour réessayer avec le bouton
+    VA.phase='final';vaRender();$va('vaSay').textContent='La commande n\'est pas partie. Vérifie ta connexion et appuie sur « Envoyer ».';
+  }
+}
+
 function closeProdModal(e){
   if(e&&e.target!==document.getElementById("prodModal"))return;
   document.getElementById("prodModal").style.display="none";
@@ -2314,7 +2926,7 @@ function renderPayMethods(s){
 }
 
 function applySiteSettings(s){
-  window.__voiceOff=(s.voice_enabled===false);const vr=document.getElementById('pmVoiceRow');if(vr)vr.style.display=window.__voiceOff?'none':'flex';
+  window.__voiceOff=(s.voice_enabled===false);const vr=document.getElementById('pmVoiceRow');if(vr)vr.style.display=window.__voiceOff?'none':'flex';const vf=document.getElementById('vaFab');if(vf)vf.style.display=window.__voiceOff?'none':'';document.querySelectorAll('.va-inline,.va-inline-wrap').forEach(e=>{e.style.display=window.__voiceOff?'none':''});
   // Nom de la boutique (Admin > Paramètres > Informations boutique > Nom)
   if(s.shop_name&&s.shop_name.trim()){
     SHOP_NAME=s.shop_name.trim();
@@ -2530,7 +3142,7 @@ function renderCheckoutTotal(){
     const qs=new URLSearchParams(window.location.search);
     const ref=qs.get('reference')||qs.get('trxref');
     if(!ref) return;
-    const SERVER_URL='https://server-piecesunik.onrender.com';
+    const SERVER_URL='https://server-kacosmetics.onrender.com';
     history.replaceState(null,'',window.location.pathname);
     const shownId=ref.replace(/-[a-z0-9]+$/i,'');
     const el=document.getElementById('confirmId');if(el) el.textContent='#'+shownId;
