@@ -117,8 +117,8 @@ select.mf-input option{background:#111;color:#fff}
 .hero-h{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,8.5vw,8rem);font-weight:900;line-height:.86;color:var(--w);letter-spacing:.02em;text-transform:uppercase;margin-bottom:1rem}
 .hero-sub{font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.9;max-width:340px;font-weight:300;text-transform:uppercase;letter-spacing:.03em}
 .hero-splash{position:absolute;top:62%;left:2rem;width:260px;height:70px;pointer-events:none;z-index:4}
-.hero-fixed{position:absolute;z-index:12;left:8vw;bottom:3.2rem}
-@media(max-width:768px){.hero-fixed{left:5vw;right:5vw;bottom:2.6rem;margin:0!important}.hero-fixed button{flex:1;justify-content:center}}
+.hero-fixed{display:block;position:absolute;z-index:12;left:8vw;bottom:3.2rem}
+@media(max-width:768px){.hero-fixed{left:5vw;right:5vw;bottom:2.4rem;margin:0!important}.hero-fixed .hero-btns{margin:0!important}.hero-fixed button{flex:1;justify-content:center}.hero-hint{font-size:.56rem}}
 .hero-btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}
 .btn-red{background:var(--red);color:var(--k);padding:12px 26px;font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;border:none;display:inline-flex;align-items:center;gap:6px}
 .btn-red:hover{background:var(--red2)}
@@ -545,11 +545,21 @@ select.mf-input option{background:#111;color:#fff}
 .pc-gros{font-size:.62rem;color:var(--g5);margin:.2rem 0;letter-spacing:.03em}.pc-gros b{color:var(--k)}
 .pc-gros-btn{margin:.4rem 0;width:100%;padding:9px;background:var(--k);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
 .pc-gros-btn:hover{background:var(--red);color:var(--k)}
+#vaSheet.txt #vaSay,#vaSheet.txt #vaHeard,#vaSheet.txt #vaMic,#vaSheet.txt #vaMicHint{display:none}
+#vaSheet .va-switch{display:none;margin:0 auto .5rem;background:none;border:1.5px solid var(--k);padding:8px 14px;font-weight:800;cursor:pointer;font-size:.8rem}
+#vaSheet.txt .va-switch{display:block}
+#vaLog{display:none;text-align:left;max-height:32vh;overflow:auto;margin:.4rem 0;padding:.2rem}
+#vaSheet.txt #vaLog{display:block}
+#vaLog .b{max-width:85%;padding:9px 12px;margin:5px 0;font-size:.88rem;line-height:1.35;border-radius:12px;white-space:pre-line}
+#vaLog .bot{background:#eee;color:#111;border-bottom-left-radius:3px;margin-right:auto}
+#vaLog .me{background:var(--red);color:var(--k);font-weight:700;border-bottom-right-radius:3px;margin-left:auto}
+.va-mhint{font-size:.68rem;color:var(--g5);margin:-.1rem 0 .4rem}
+.hero-hint{font-size:.62rem;color:rgba(255,255,255,.85);letter-spacing:.05em;margin-bottom:6px;text-shadow:0 1px 3px #000}
 #vaSheet{display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:.6rem}
 #vaSheet .va-box{position:relative;background:#fff;width:100%;max-width:480px;max-height:97vh;overflow:auto;padding:1.1rem 1rem;text-align:center;border-top:4px solid var(--red)}
 #vaSheet .vs-x{position:absolute;top:6px;right:10px;background:none;border:none;font-size:1.5rem;cursor:pointer}
 .va-title{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-#vaMic{width:84px;height:84px;margin:.2rem auto}
+#vaMic{width:84px;height:84px;margin:.2rem auto;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none}
 #vaMic .mic-ico{width:40px;height:40px;margin:0}
 .va-type{display:flex;gap:6px;margin:.3rem 0 .6rem}.va-type input{flex:1;padding:12px;border:1.5px solid var(--w3);font-size:.9rem;min-width:0}.va-type button{padding:0 16px;border:none;background:var(--k);color:#fff;font-weight:800;cursor:pointer}
 .va-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:.3rem 0}.va-chip-t{width:100%;font-size:.75rem;font-weight:800;color:var(--g5)}
@@ -580,9 +590,12 @@ select.mf-input option{background:#111;color:#fff}
   <button class="vs-x" onclick="vaClose()" aria-label="Fermer">✕</button>
   <div class="va-title">Commande vocale</div>
   <div id="vaSay" class="vs-state"></div>
-  <button id="vaMic" class="vs-mic" onclick="vaMicTap()" aria-label="Parler"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg></button>
+  <button id="vaMic" class="vs-mic" onclick="vaMicTap()" aria-label="Parler : maintiens appuyé comme sur WhatsApp"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg></button>
+  <div id="vaMicHint" class="va-mhint">Maintiens le micro appuyé pour parler, relâche quand tu as fini</div>
   <div id="vaHeard" class="vs-heard"></div>
+  <div id="vaLog" aria-live="polite"></div>
   <div class="va-type"><input id="vaType" type="text" placeholder="Ou écris ici (ex : 2 savon noir et 1 huile)" onkeydown="if(event.key==='Enter')vaTypeSubmit()"/><button onclick="vaTypeSubmit()">OK</button></div>
+  <button id="vaSwitch" class="va-switch" onclick="vaSwitchVoice()">🎤 Passer à la voix</button>
   <div id="vaChips" class="va-chips"></div>
   <div id="vaBasket"></div>
   <div id="vaTotal" class="vs-total"></div>
@@ -733,10 +746,10 @@ select.mf-input option{background:#111;color:#fff}
     <button id="hcNext" onclick="heroSlide(1)" style="position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);width:42px;height:42px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--w);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:background .2s;border-radius:2px">›</button>
 
     <!-- BOUTONS FIXES : restent affichés quelle que soit la slide -->
-        <div class="hero-btns hero-fixed">
-          <button class="hb-voc home-voc" onclick="event.stopPropagation();vaOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
-          <button class="hb-ecr" onclick="event.stopPropagation();document.getElementById('homeRows').scrollIntoView({behavior:'smooth'})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg><span>Commande écrite</span></button>
-        </div>
+        <div class="hero-fixed"><div class="hero-hint">🎤 Maintiens « vocale » appuyé pour parler, comme sur WhatsApp</div><div class="hero-btns">
+          <button class="hb-voc home-voc va-hold" onclick="event.stopPropagation();vaOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
+          <button class="hb-ecr" onclick="event.stopPropagation();vaOpen({text:true})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg><span>Commande écrite</span></button>
+        </div></div>
 
     <!-- Dots — générés dynamiquement -->
     <div id="hcDots" style="position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10"></div>
@@ -2210,6 +2223,7 @@ const vaMany=it=>((PRODS.find(p=>p.id===it.id)||{}).sizes||[]).length>1;
 // ── parole (synthèse) : le micro ne s'ouvre qu'une fois la phrase terminée ──
 function vaSay(txt,next){
   const id=++VA.say;$va('vaSay').textContent=txt;
+  if(VA.txt){setTimeout(()=>{if(id===VA.say&&VA.open&&next)next();},40);return;} // mode écrit : on affiche seulement, sans parler
   let done=false;const fin=()=>{if(done||id!==VA.say)return;done=true;clearTimeout(tm);if(VA.open&&next)next();};
   const tm=setTimeout(fin,Math.min(22000,2500+txt.length*105));
   try{
@@ -2241,7 +2255,7 @@ function vaRecStop(){
 // ── écoute (reconnaissance vocale) ──
 function vaMic(on){const b=$va('vaMic');if(b)b.classList.toggle('on',!!on);}
 async function vaListen(){
-  if(!VA.open||VA.listening)return;
+  if(!VA.open||VA.listening||VA.txt)return;
   VA.listening=true;try{await VA.recP;}catch(e){}VA.listening=false;
   if(!VA.open||VA.listening)return;
   if(!_SR){$va('vaSay').textContent='Ton téléphone ne comprend pas la voix ici (essaie Chrome). Écris ta demande dans la case, ou utilise les boutons.';return;}
@@ -2264,6 +2278,7 @@ async function vaListen(){
   try{r.start();}catch(e){VA.listening=false;vaMic(false);}
 }
 function vaMicTap(){
+  if(HLD.on)return;
   if(VA.listening){try{VA.rec&&VA.rec.stop();}catch(e){}return;}
   VA.noHear=0;vaListen();
 }
@@ -2273,23 +2288,98 @@ function vaNoSpeech(){
   if(VA.noHear>=2){$va('vaSay').textContent='Je ne t\'entends pas. Appuie sur le micro et parle, ou écris dans la case.';return;}
   vaAsk('Je n\'ai rien entendu. Redis-le, s\'il te plaît.');
 }
+// ═══ COMMANDE ÉCRITE : même assistant, mais on tape et il répond par écrit ═══
+const HLD={on:false,stop:false,text:'',interim:'',rec:null,t:null,active:false,swallow:false,retried:false,fb:null};
+function vaLog(kind,txt){
+  const L=$va('vaLog');if(!L||!txt)return;
+  const last=L.lastElementChild;if(last&&last.dataset.k===kind&&last.textContent===txt)return;
+  const d=document.createElement('div');d.className='b '+kind;d.dataset.k=kind;d.textContent=txt;L.appendChild(d);L.scrollTop=L.scrollHeight;
+}
+let _vaObs=null;
+function vaSetTxt(on){
+  VA.txt=!!on;
+  const sh=$va('vaSheet');if(sh)sh.classList.toggle('txt',!!on);
+  const ti=$va('vaType');if(ti)ti.placeholder=on?'Écris ta commande (ex : 2 savon noir et 1 huile)':'Ou écris ici (ex : 2 savon noir et 1 huile)';
+  const L=$va('vaLog');if(L&&on)L.innerHTML='';
+  const tt=document.querySelector('#vaSheet .va-title');if(tt)tt.textContent=on?'Commande écrite':'Commande vocale';
+  if(!_vaObs&&window.MutationObserver){
+    _vaObs=new MutationObserver(()=>{if(!VA.txt)return;const t=($va('vaSay').textContent||'').trim();if(t&&t!=='…')vaLog('bot',t);});
+    _vaObs.observe($va('vaSay'),{childList:true,characterData:true,subtree:true});
+  }
+  if(on)setTimeout(()=>{try{ti&&ti.focus();}catch(e){}},200);
+}
+async function vaSwitchVoice(){
+  vaSetTxt(false);VA.noHear=0;
+  VA.recP=vaRecStart();
+  vaAsk(VA.lastQ||'Dis-moi ce que tu veux.');
+}
+// ═══ MICRO DE L'ASSISTANT : maintenir appuyé = parler, sans coupure (comme WhatsApp) ═══
+function vaHoldStart(){
+  if(!VA.open||VA.txt||HLD.on)return;
+  if(!_SR){$va('vaSay').textContent='Ton téléphone ne comprend pas la voix ici (essaie Chrome). Écris dans la case.';return;}
+  try{speechSynthesis.cancel();}catch(e){}VA.say++;
+  try{if(VA.rec){VA.rec.onend=null;VA.rec.abort();}}catch(e){}clearTimeout(VA.maxT);
+  Object.assign(HLD,{on:true,stop:false,text:'',interim:'',retried:false,t0:Date.now()});
+  VA.listening=true;vaMic(true);$va('vaHeard').textContent='';
+  $va('vaSay').textContent='🎤 Je t\'écoute… relâche quand tu as fini';
+  try{navigator.vibrate&&navigator.vibrate(25);}catch(e){}
+  vaHoldListen();
+}
+function vaHoldListen(){
+  const r=new _SR();HLD.rec=r;r.lang='fr-FR';r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+  r.onresult=e=>{let f='',i2='';for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)f+=' '+t;else i2+=' '+t;}HLD.base=(HLD.acc||'');HLD.text=f.trim();HLD.interim=i2.trim();$va('vaHeard').textContent='« '+[HLD.acc||'',HLD.text,HLD.interim].join(' ').replace(/\s+/g,' ').trim()+' »';};
+  r.onerror=e=>{VA.err=e.error||'';if(e.error==='not-allowed'||e.error==='service-not-allowed')HLD.denied=true;if(e.error==='audio-capture'&&VA.media&&!HLD.retried){HLD.retried=true;HLD.dropRec=true;}};
+  r.onend=()=>{
+    // le navigateur coupe seul après un silence : on garde ce qui a été dit et on relance tant que le doigt reste appuyé
+    HLD.acc=[HLD.acc||'',HLD.text,HLD.interim].join(' ').replace(/\s+/g,' ').trim();HLD.text='';HLD.interim='';
+    if(HLD.dropRec){HLD.dropRec=false;try{VA.media&&VA.media.state!=='inactive'&&(VA.media.onstop=null,VA.media.stop());}catch(x){}try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(x){}VA.media=null;VA.chunks=[];VA.blob=null;}
+    if(HLD.on&&!HLD.stop&&!HLD.denied){try{vaHoldListen();}catch(x){}return;}
+    vaHoldFinish();
+  };
+  try{r.start();}catch(e){}
+}
+function vaHoldEnd(){
+  if(!HLD.on||HLD.stop)return;HLD.stop=true;
+  if(Date.now()-HLD.t0<600)toast('Garde le doigt appuyé pendant que tu parles');
+  try{HLD.rec&&HLD.rec.stop();}catch(e){}
+  clearTimeout(HLD.fb);HLD.fb=setTimeout(vaHoldFinish,1800);
+}
+function vaHoldFinish(){
+  if(!HLD.on)return;HLD.on=false;clearTimeout(HLD.fb);
+  try{HLD.rec&&(HLD.rec.onend=null,HLD.rec.abort());}catch(e){}
+  const text=[HLD.acc||'',HLD.text,HLD.interim].join(' ').replace(/\s+/g,' ').trim();HLD.acc='';HLD.text='';HLD.interim='';
+  VA.listening=false;vaMic(false);
+  if(!VA.open)return;
+  if(HLD.denied){HLD.denied=false;vaNoSpeech();return;}
+  if(!text){$va('vaSay').textContent='Je n\'ai rien entendu. Garde le micro appuyé en parlant.';return;}
+  VA.noHear=0;vaHandle([text]);
+}
+(function(){
+  const get=e=>e.target.closest&&e.target.closest('#vaMic');
+  document.addEventListener('pointerdown',e=>{if(!get(e)||!VA.open||VA.txt)return;HLD.active=false;clearTimeout(HLD.t);HLD.t=setTimeout(()=>{HLD.active=true;vaHoldStart();},280);});
+  const end=()=>{clearTimeout(HLD.t);if(HLD.active){HLD.active=false;HLD.swallow=true;setTimeout(()=>{HLD.swallow=false;},600);vaHoldEnd();}};
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  document.addEventListener('click',e=>{if(HLD.swallow&&get(e)){e.preventDefault();e.stopPropagation();HLD.swallow=false;}},true);
+  document.addEventListener('contextmenu',e=>{if(get(e))e.preventDefault();});
+})();
 function vaTypeSubmit(){const i=$va('vaType');const t=(i.value||'').trim();if(!t)return;i.value='';VA.noHear=0;vaHandle([t]);}
 // ── ouverture / fermeture ──
 async function vaOpen(opts){
   opts=opts||{};
-  if(VA.open||window.__voiceOff)return;
+  if(VA.open||(window.__voiceOff&&!opts.text))return;
   const keep=VA.basket.length>0;
   Object.assign(VA,{open:true,phase:'order',gamme:null,cat:null,pend:[],noHear:0,retried:false,restart:false,listening:false,sending:false,err:'',phoneFail:0,lastQ:''});
   if(!keep)Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],last:null,telOk:false,offer:null});
   const pc=$va('page-catalog');
   if(pc&&pc.classList.contains('active')){VA.cat=currentCat||null;VA.gamme=window.CUR_GFILTER||null;}
   if(opts.gamme)VA.gamme=opts.gamme;
+  vaSetTxt(!!opts.text);
   $va('vaSheet').style.display='flex';$va('vaHeard').textContent='';
   const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
   if(opts.prod){vaAddItem(opts.prod,'',R,pmSelectedSize);}
   vaRender();
   // un seul clic : le navigateur demande lui-même l'autorisation du micro, on n'ajoute aucune étape
-  VA.recP=vaRecStart();
+  VA.recP=VA.txt?Promise.resolve():vaRecStart();
   try{fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.llm===false)VA_LLM_OFF=true;}).catch(()=>{});}catch(e){}
   const ex=PRODS.filter(p=>p.active!==false).slice(0,2).map((p,i)=>(i?'et un ':'deux ')+p.name).join(' ');
   if(opts.silent)return;
@@ -2298,7 +2388,7 @@ async function vaOpen(opts){
   else vaAsk('Dis-moi ce que tu veux.'+(ex?' Par exemple : '+ex+'.':'')+' Tu peux aussi dire le nom d\'une gamme.');
 }
 async function vaClose(){
-  if(!VA.open)return;VA.open=false;VA.say++;
+  if(!VA.open)return;VA.open=false;VA.say++;HLD.on=false;try{HLD.rec&&(HLD.rec.onend=null,HLD.rec.abort());}catch(e){}vaSetTxt(false);
   try{VA.rec&&VA.rec.abort();}catch(e){}clearTimeout(VA.maxT);VA.listening=false;vaMic(false);
   try{speechSynthesis.cancel();}catch(e){}
   try{if(VA.media&&VA.media.state!=='inactive'){VA.media.onstop=null;VA.media.stop();}}catch(e){}
@@ -2598,7 +2688,7 @@ function vaRepeatQ(){vaAsk('Je n\'ai pas bien compris. '+(VA.lastQ||'Dis-moi ce 
 // ── applique ce que le client a dit, puis pose la bonne question suivante ──
 async function vaHandle(alts){
   const text=(alts[0]||'').trim();if(!text){vaNoSpeech();return;}
-  VA.noHear=0;VA.turns.push(text);$va('vaHeard').textContent='« '+text+' »';$va('vaSay').textContent='…';
+  VA.noHear=0;VA.turns.push(text);if(VA.txt)vaLog('me',text);$va('vaHeard').textContent='« '+text+' »';$va('vaSay').textContent='…';
   let I=await vaLLM(text,alts);
   if(!VA.open)return;
   if(!I)I=vaRuleIntent(text);
@@ -2775,7 +2865,7 @@ async function qtStart(){
   if(VA.open||QT.on)return;
   if(!_SR){toast('Ton téléphone ne comprend pas la voix ici. Touche le bouton pour ouvrir la commande vocale.');return;}
   try{speechSynthesis.cancel();VA.say++;}catch(e){}
-  Object.assign(QT,{on:true,stop:false,text:'',interim:'',chunks:[],media:null,stream:null,retried:false,t0:Date.now()});
+  Object.assign(QT,{on:true,stop:false,text:'',interim:'',acc:'',chunks:[],media:null,stream:null,retried:false,t0:Date.now()});
   $va('vaQtTxt').textContent='';qtShow(true);
   try{navigator.vibrate&&navigator.vibrate(30);}catch(e){}
   await qtRecStart();
@@ -2798,13 +2888,14 @@ function qtListen(){
     let fin='',inter='';
     for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=' '+t;else inter+=' '+t;}
     QT.text=fin.trim();QT.interim=inter.trim();
-    $va('vaQtTxt').textContent='« '+(QT.text+' '+QT.interim).trim()+' »';
+    $va('vaQtTxt').textContent='« '+[QT.acc,QT.text,QT.interim].join(' ').replace(/\s+/g,' ').trim()+' »';
   };
   r.onerror=e=>{
     if(e.error==='audio-capture'&&QT.media&&!QT.retried){QT.retried=true;QT.restartNoRec=true;}
     if(e.error==='not-allowed'||e.error==='service-not-allowed')QT.denied=true;
   };
   r.onend=()=>{
+    QT.acc=[QT.acc,QT.text,QT.interim].join(' ').replace(/\s+/g,' ').trim();QT.text='';QT.interim=''; // on garde ce qui a été dit avant la coupure du navigateur
     if(QT.restartNoRec){QT.restartNoRec=false;try{QT.media&&QT.media.state!=='inactive'&&(QT.media.onstop=null,QT.media.stop());}catch(x){}try{QT.stream&&QT.stream.getTracks().forEach(t=>t.stop());}catch(x){}QT.media=null;QT.chunks=[];if(!QT.stop){qtListen();return;}}
     if(QT.on&&!QT.stop&&!QT.denied){try{qtListen();}catch(x){}return;} // le navigateur coupe après un silence : on relance tant que le doigt reste appuyé
     clearTimeout(QT.tm);qtFinish();
@@ -2825,7 +2916,7 @@ async function qtFinish(){
     const fin=()=>{try{QT.stream&&QT.stream.getTracks().forEach(t=>t.stop());}catch(e){}QT.stream=null;if(QT.chunks.length)blob=new Blob(QT.chunks,{type:QT.mime||'audio/webm'});res();};
     if(media&&media.state!=='inactive'){media.onstop=fin;try{media.stop();}catch(e){fin();}}else fin();
   });
-  const text=(QT.text+' '+QT.interim).trim();
+  const text=[QT.acc,QT.text,QT.interim].join(' ').replace(/\s+/g,' ').trim();
   if(QT.denied){QT.denied=false;toast('Autorise le micro dans ton navigateur');return;}
   if(!text){toast('Je n\'ai rien entendu. Garde le doigt appuyé en parlant.');return;}
   qtProcess(text,blob?{blob,mime:QT.mime,transcript:text}:{blob:null,mime:'',transcript:text});
