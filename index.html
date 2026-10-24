@@ -117,6 +117,8 @@ select.mf-input option{background:#111;color:#fff}
 .hero-h{font-family:"Barlow Condensed",sans-serif;font-size:clamp(4rem,8.5vw,8rem);font-weight:900;line-height:.86;color:var(--w);letter-spacing:.02em;text-transform:uppercase;margin-bottom:1rem}
 .hero-sub{font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.9;max-width:340px;font-weight:300;text-transform:uppercase;letter-spacing:.03em}
 .hero-splash{position:absolute;top:62%;left:2rem;width:260px;height:70px;pointer-events:none;z-index:4}
+.hero-fixed{position:absolute;z-index:12;left:8vw;bottom:3.2rem}
+@media(max-width:768px){.hero-fixed{left:5vw;right:5vw;bottom:2.6rem;margin:0!important}.hero-fixed button{flex:1;justify-content:center}}
 .hero-btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}
 .btn-red{background:var(--red);color:var(--k);padding:12px 26px;font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;border:none;display:inline-flex;align-items:center;gap:6px}
 .btn-red:hover{background:var(--red2)}
@@ -495,6 +497,54 @@ select.mf-input option{background:#111;color:#fff}
 #vaFab{position:fixed;left:14px;bottom:14px;z-index:640;display:flex;align-items:center;gap:8px;padding:13px 18px;border:none;border-radius:40px;background:var(--red);color:var(--k);font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.28)}
 #vaFab .mic-ico{margin:0;width:22px;height:22px}
 @media(max-width:520px){#vaFab{padding:14px;bottom:76px}#vaFab span{display:none}}
+.va-hold{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+#vaQt{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:150px;z-index:10070;background:#d62828;color:#fff;padding:12px 18px;border-radius:14px;max-width:92vw;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);font-size:.95rem}
+#vaQt #vaQtTxt{font-size:.85rem;font-style:italic;opacity:.95;margin-top:3px;max-height:4.5em;overflow:hidden}
+.qt-dot{width:16px;height:16px;border-radius:50%;background:#fff;flex-shrink:0;animation:vspulse 1s infinite}
+#vaBar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:140px;z-index:645;background:var(--k);color:#fff;border-radius:40px;padding:8px 8px 8px 16px;align-items:center;gap:8px;max-width:94vw;box-shadow:0 6px 22px rgba(0,0,0,.35);font-size:.82rem}
+#vaBar #vaBarTxt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+#vaBar .vb-ok{background:#1f9d4a;color:#fff;border:none;border-radius:30px;padding:10px 14px;font-weight:900;cursor:pointer;white-space:nowrap}
+#vaBar .vb-x{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;padding:6px 8px}
+#vaHint{display:none;position:fixed;left:14px;bottom:140px;z-index:641;background:var(--k);color:#fff;padding:9px 13px;border-radius:12px;font-size:.8rem;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+@media(min-width:521px){#vaBar{bottom:20px;left:210px;transform:none}#vaQt{bottom:90px}#vaHint{bottom:78px}}
+.gm-chips{display:flex;gap:8px;overflow-x:auto;padding:1.2rem 0 .4rem;scrollbar-width:none}.gm-chips::-webkit-scrollbar{display:none}
+.gm-chip{flex-shrink:0;padding:10px 18px;border:1.5px solid var(--k);background:var(--w);font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
+.gm-chip:hover{background:var(--k);color:#fff}
+.gm-sec{margin:2rem 0 3rem;scroll-margin-top:90px}
+.gm-hd{position:relative;overflow:hidden;background:var(--k);color:#fff;padding:2.2rem 1.8rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1.2rem;flex-wrap:wrap;min-height:170px;border-bottom:3px solid var(--red)}
+.gm-hd .gm-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a,#2a2208);background-size:cover;background-position:center}
+.gm-hd .gm-bg.img{opacity:.5}
+.gm-hd>*{position:relative}
+.gm-eyebrow{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);font-weight:800}
+.gm-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:900;letter-spacing:.02em;text-transform:uppercase;line-height:1;margin:.2rem 0}
+.gm-desc{font-size:.85rem;opacity:.85;max-width:560px;line-height:1.6}
+.gm-btns{display:flex;gap:8px;flex-wrap:wrap}
+.gm-btn{padding:12px 18px;border:2px solid #fff;background:transparent;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.gm-btn.pri{background:var(--red);border-color:var(--red);color:var(--k)}
+.gm-btn .mic-ico{width:18px;height:18px;margin:0}
+.gm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(230px,46%),1fr));gap:1px;background:var(--w);margin-top:1px}
+.gm-grid .pc{outline:1px solid var(--w3);outline-offset:-1px}
+@media(max-width:520px){.gm-hd{padding:1.4rem 1rem}.gm-btn{flex:1;justify-content:center;padding:12px 8px}}
+.hero-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hero-btns button{display:flex;align-items:center;gap:6px;padding:12px 18px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.hero-btns .hb-voc{background:var(--red);color:var(--k);border:2px solid var(--red)}
+.hero-btns .hb-ecr{background:rgba(0,0,0,.5);color:#fff;border:2px solid #fff}
+@media(max-width:768px){.hero-btns{gap:6px}.hero-btns button{padding:9px 8px;font-size:.7rem;letter-spacing:.03em;white-space:nowrap}#heroCarousel{height:360px!important}.hero-btns{flex-wrap:nowrap!important;gap:4px!important}.hero-btns button{font-size:.62rem!important;padding:9px 6px!important}#heroSlides .btn-red{font-size:.62rem!important;padding:9px 8px!important}.hero-btns button svg{display:none}#heroSlides h2{font-size:clamp(2.4rem,12vw,3.5rem)!important;margin-bottom:.4rem!important}#heroSlides p{margin-bottom:.8rem!important}}
+.home-cta{display:flex;gap:10px;max-width:780px;margin:1.6rem auto 0;padding:0 1rem}
+.home-cta button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px 10px;border:2px solid var(--k);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;line-height:1.1}
+.home-cta button .mic-ico{width:28px;height:28px;margin:0 0 2px}
+.home-cta small{font-family:'Barlow',sans-serif;font-size:.6rem;letter-spacing:.04em;font-weight:700;text-transform:none;opacity:.8}
+.home-cta .voc{background:var(--red);color:var(--k)}.home-cta .ecr{background:var(--k);color:#fff}
+.hrow-wrap{position:relative}
+.hrow{display:flex;gap:1px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;background:var(--w3);scrollbar-width:none;border:1px solid var(--w3)}
+.hrow::-webkit-scrollbar{display:none}
+.hrow .pc{flex:0 0 clamp(190px,22vw,260px);scroll-snap-align:start}
+.hrow-arrow{position:absolute;top:38%;z-index:5;width:42px;height:42px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.6);color:#fff;font-size:1.5rem;cursor:pointer}
+.hrow-arrow.l{left:6px}.hrow-arrow.r{right:6px}
+@media(max-width:768px){.hrow-arrow{display:none}.hrow .pc{flex-basis:46vw}.home-cta button{font-size:1.02rem;padding:14px 6px}.home-cta small{display:none}}
+.pc-gros{font-size:.62rem;color:var(--g5);margin:.2rem 0;letter-spacing:.03em}.pc-gros b{color:var(--k)}
+.pc-gros-btn{margin:.4rem 0;width:100%;padding:9px;background:var(--k);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.pc-gros-btn:hover{background:var(--red);color:var(--k)}
 #vaSheet{display:none;position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:.6rem}
 #vaSheet .va-box{position:relative;background:#fff;width:100%;max-width:480px;max-height:97vh;overflow:auto;padding:1.1rem 1rem;text-align:center;border-top:4px solid var(--red)}
 #vaSheet .vs-x{position:absolute;top:6px;right:10px;background:none;border:none;font-size:1.5rem;cursor:pointer}
@@ -522,7 +572,10 @@ select.mf-input option{background:#111;color:#fff}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<button id="vaFab" onclick="vaOpen()" aria-label="Commander à la voix"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
+<div id="vaQt" role="status" aria-live="polite"><div class="qt-dot"></div><div><b>Je t'écoute… parle, puis relâche</b><div id="vaQtTxt"></div></div></div>
+<div id="vaBar"><div id="vaBarTxt"></div><button class="vb-ok" onclick="vaOpen()">✓ Terminer</button><button class="vb-x" onclick="vaReset()" aria-label="Vider le panier">✕</button></div>
+<div id="vaHint">👆 Maintiens appuyé et parle</div>
+<button id="vaFab" class="va-hold" onclick="vaOpen()" aria-label="Commander à la voix : touche pour ouvrir, maintiens pour parler"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
 <div id="vaSheet" role="dialog" aria-label="Commande vocale"><div class="va-box">
   <button class="vs-x" onclick="vaClose()" aria-label="Fermer">✕</button>
   <div class="va-title">Commande vocale</div>
@@ -679,6 +732,12 @@ select.mf-input option{background:#111;color:#fff}
     <button id="hcPrev" onclick="heroSlide(-1)" style="position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);width:42px;height:42px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--w);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:background .2s;border-radius:2px">‹</button>
     <button id="hcNext" onclick="heroSlide(1)" style="position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);width:42px;height:42px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--w);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:background .2s;border-radius:2px">›</button>
 
+    <!-- BOUTONS FIXES : restent affichés quelle que soit la slide -->
+        <div class="hero-btns hero-fixed">
+          <button class="hb-voc home-voc" onclick="event.stopPropagation();vaOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg><span>Commande vocale</span></button>
+          <button class="hb-ecr" onclick="event.stopPropagation();document.getElementById('homeRows').scrollIntoView({behavior:'smooth'})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg><span>Commande écrite</span></button>
+        </div>
+
     <!-- Dots — générés dynamiquement -->
     <div id="hcDots" style="position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10"></div>
   </div>
@@ -693,7 +752,7 @@ select.mf-input option{background:#111;color:#fff}
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.5rem">
       <div>
         <div style="font-size:.5rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--g5);margin-bottom:.2rem">Explorer</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em">Nos Catégories</div>
+        <div id="homeCatsTitle" style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em">Nos Gammes</div>
       </div>
     </div>
     <!-- Grille catégories — générée dynamiquement depuis Supabase (renderCatsGrid) -->
@@ -701,7 +760,6 @@ select.mf-input option{background:#111;color:#fff}
   </div>
 
   <!-- FLASH BAR -->
-  <div style="text-align:center;padding:0 1rem" class="va-inline-wrap"><button class="va-inline" onclick="vaOpen()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>Commander à la voix</button></div>
   <div class="flash-bar" id="flashBar">
     <div class="si"><div class="fb-in">
       <div class="fb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Livraison Rapide</div>
@@ -711,19 +769,27 @@ select.mf-input option{background:#111;color:#fff}
     </div></div>
   </div>
 
-  <!-- BEST SELLERS SECTION -->
-  <div class="si" style="padding:2.5rem 0 3rem">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.5rem">
+  <!-- LIGNE 1 : PRIX EN DÉTAIL -->
+  <div class="si" id="homeRows" style="padding:2.5rem 0 1rem;scroll-margin-top:80px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem">
       <div>
-        <div style="font-size:.5rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--g5);margin-bottom:.2rem">Incontournables</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em">Best Sellers</div>
+        <div style="font-size:.5rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--g5);margin-bottom:.2rem">À l'unité</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em">Prix en détail</div>
       </div>
       <button class="btn-outline" onclick="goShop()" style="font-size:.58rem;padding:9px 18px">Tout voir →</button>
     </div>
-    <div class="prod-grid" id="homeAllGrid"></div>
-    <div style="text-align:center;margin-top:2.5rem">
-      <button class="btn-outline" onclick="goShop()" style="padding:14px 50px;font-size:.62rem">Voir tous les produits →</button>
+    <div class="hrow-wrap"><button class="hrow-arrow l" onclick="hrowScroll('homeRetailRow',-1)" aria-label="Précédent">‹</button><div class="hrow" id="homeRetailRow"></div><button class="hrow-arrow r" onclick="hrowScroll('homeRetailRow',1)" aria-label="Suivant">›</button></div>
+  </div>
+
+  <!-- LIGNE 2 : PRODUITS EN GROS (visible seulement si des prix de gros existent) -->
+  <div class="si" id="homeWholesaleSec" style="padding:1.5rem 0 3rem;display:none">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem">
+      <div>
+        <div style="font-size:.5rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem">Pour revendre ou acheter en quantité</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em">Produits en gros</div>
+      </div>
     </div>
+    <div class="hrow-wrap"><button class="hrow-arrow l" onclick="hrowScroll('homeWholesaleRow',-1)" aria-label="Précédent">‹</button><div class="hrow" id="homeWholesaleRow"></div><button class="hrow-arrow r" onclick="hrowScroll('homeWholesaleRow',1)" aria-label="Suivant">›</button></div>
   </div>
 
   <!-- RECOMMANDÉ POUR TOI — section personnalisée, visible seulement si activité détectée -->
@@ -739,12 +805,23 @@ select.mf-input option{background:#111;color:#fff}
 </div>
 
 <!-- ========== PAGE CATALOGUE ========== -->
+<div class="page" id="page-gammes">
+  <div class="cat-pg-hd">
+    <div class="si">
+      <div class="cat-pg-brand shop-n">KA Cosmetics</div>
+      <div class="cat-pg-title">Nos gammes</div>
+      <div class="cat-pg-sub" id="gmSub">Chaque gamme réunit des produits faits pour aller ensemble.</div>
+    </div>
+  </div>
+  <div class="si"><div class="gm-chips" id="gmChips"></div><div id="gmBody"></div></div>
+</div>
+
 <div class="page" id="page-catalog">
   <div class="cat-pg-hd" id="cat-pg-hd">
     <div class="si">
       <div class="cat-pg-brand shop-n">KA Cosmetics</div>
       <div class="cat-pg-title" id="catTitle">HOMME</div>
-      <button class="va-inline" onclick="vaOpen()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>Commander à la voix</button>
+      <button class="va-inline va-hold" onclick="vaOpen()"><svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>Commander à la voix</button>
       <div class="cat-pg-sub" id="catSub">Pour ceux qui vivent dans l'ombre</div>
     </div>
   </div>
@@ -1241,12 +1318,13 @@ function nav(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page-"+id).classList.add("active");
   document.querySelectorAll(".nav-links a").forEach(a=>a.classList.remove("on"));
-  const m={about:"nl-about",newdrop:"nl-newdrop"};
+  const m={about:"nl-about",newdrop:"nl-newdrop",gammes:"nl-gammes"};
   if(m[id]){const navA=document.getElementById(m[id]);if(navA)navA.classList.add("on");}
   window.scrollTo({top:0,behavior:"smooth"});
   if(id==="home") renderHome();
   if(id==="cart") renderCartPage();
   if(id==="newdrop") renderNewDrop();
+  if(id==="gammes") renderGammesPage();
   if(id==="wishlist") renderWishlist();
   if(id.startsWith("checkout")) renderRecap();
 }
@@ -1318,8 +1396,11 @@ function renderHome(filter){
   if(filter==="new") prods=prods.filter(p=>p.badge==="NEW"||p.badge==="HOT");
   else if(filter==="hot") prods=prods.filter(p=>p.badge==="HOT"||p.old>0);
   else if(filter) prods=prods.filter(p=>p.cat===filter);
-  const grid=document.getElementById("homeAllGrid");
-  if(grid) grid.innerHTML=prods.map(pcHTML).join("");
+  const retail=document.getElementById("homeRetailRow");
+  if(retail) retail.innerHTML=prods.map(p=>pcHTML(p)).join("")||'<p style="padding:2rem 1rem;color:var(--g5)">Aucun produit pour le moment.</p>';
+  const gros=prods.filter(p=>p.gros>0&&p.grosMin>0&&p.gros<p.price);
+  const gsec=document.getElementById("homeWholesaleSec"),grow=document.getElementById("homeWholesaleRow");
+  if(gsec&&grow){gsec.style.display=gros.length?"":"none";grow.innerHTML=gros.map(p=>pcGros(p)).join("");}
   renderRecommended();
 }
 // ═══ SECTION "RECOMMANDÉ POUR TOI" — basée sur le comportement réel du visiteur ═══
@@ -1447,8 +1528,18 @@ function renderWishlist(){
     updateWishUI();
   }
 }
-function cartTotal(){return cart.reduce((s,c)=>s+c.price*c.qty,0);}
+// Prix de gros : dès que le client prend la quantité minimale d'un produit, tout ce produit passe au prix de gros.
+function unitPrice(c){
+  const p=PRODS.find(x=>x.id===c.id);
+  if(p&&p.gros>0&&p.grosMin>0&&p.gros<p.price){
+    const q=cart.filter(x=>x.id===c.id).reduce((a,x)=>a+x.qty,0);
+    if(q>=p.grosMin)return p.gros;
+  }
+  return c.price;
+}
+function cartTotal(){return cart.reduce((s,c)=>s+unitPrice(c)*c.qty,0);}
 function updateCartUI(){
+  try{vaBarRender();}catch(e){}
   const n=cart.reduce((s,c)=>s+c.qty,0);
   const bdg=document.getElementById("cartBdg");
   bdg.textContent=n;bdg.style.display=n>0?"flex":"none";
@@ -1464,7 +1555,7 @@ function renderCartDrawer(){
       <div class="ci-info">
         <div class="ci-name">${c.name}</div>
         <div class="ci-meta">Format : ${c.size}</div>
-        <div class="ci-price">${FMT(c.price)}</div>
+        <div class="ci-price">${FMT(unitPrice(c))}${unitPrice(c)<c.price?' <small style="color:var(--red);font-weight:800">prix de gros</small>':''}</div>
         <div class="qty-ctrl">
           <div class="qty-btn" onclick="changeQty(${c.id},-1,'${c.size}')">−</div>
           <span class="qty-n">${c.qty}</span>
@@ -1481,13 +1572,13 @@ function renderCartPage(){
       <img class="cpt-img" src="${c.img}" alt="${c.name}" onerror="this.style.opacity='.3'"/>
       <div><div class="cpt-name">${c.name}</div><div class="cpt-meta">Format : ${c.size}</div><span class="cpt-rm" onclick="removeFromCart(${c.id},'${c.size}')">Supprimer</span></div>
     </div></td>
-    <td class="cpt-price">${FMT(c.price)}</td>
+    <td class="cpt-price">${FMT(unitPrice(c))}</td>
     <td><div class="qty-ctrl">
       <div class="qty-btn" onclick="changeQty(${c.id},-1,'${c.size}')">−</div>
       <span class="qty-n">${c.qty}</span>
       <div class="qty-btn" onclick="changeQty(${c.id},1,'${c.size}')">+</div>
     </div></td>
-    <td class="cpt-total">${FMT(c.price*c.qty)}</td>
+    <td class="cpt-total">${FMT(unitPrice(c)*c.qty)}</td>
   </tr>`).join("");
   const t=cartTotal();
   const finalT=cartTotalAfterPromo();
@@ -1515,7 +1606,7 @@ function renderRecap(){
   const html=cart.map(c=>`<div class="or-item">
     <img class="or-img" src="${c.img}" alt="${c.name}" onerror="this.style.opacity='.3'"/>
     <div class="or-name">${c.name}<div class="or-qty">Qté : ${c.qty} · ${c.size}</div></div>
-    <div class="or-price">${FMT(c.price*c.qty)}</div>
+    <div class="or-price">${FMT(unitPrice(c)*c.qty)}</div>
   </div>`).join("");
   const sub=cartTotal();
   const final=cartTotalAfterPromo();
@@ -1566,8 +1657,9 @@ const VOICE_CLIPS={}; // enregistrements audio en attente d'envoi (par clé)
 async function uploadVoiceClips(orderId){
   const out=[];let n=0;
   for(const c of cart){
-    if(!c.clip||!VOICE_CLIPS[c.clip])continue;
-    const v=VOICE_CLIPS[c.clip];n++;
+   for(const ck of (c.clips||(c.clip?[c.clip]:[]))){
+    if(!VOICE_CLIPS[ck])continue;
+    const v=VOICE_CLIPS[ck];n++;
     let url='';
     if(v.blob){
       try{
@@ -1578,7 +1670,8 @@ async function uploadVoiceClips(orderId){
         url=sb.storage.from('voice-orders').getPublicUrl(path).data.publicUrl;
       }catch(e){console.warn('Audio non envoyé:',e);}
     }
-    out.push({product_id:c.id,name:v.label||c.name,qty:v.label?cart.reduce((a,x)=>a+x.qty,0):c.qty,format:v.label?'':c.size,url,transcript:v.transcript||''});
+    out.push({product_id:c.id,name:v.label||c.name,qty:v.qty!=null?v.qty:(v.label?cart.reduce((a,x)=>a+x.qty,0):c.qty),format:v.label&&v.qty==null?'':c.size,url,transcript:v.transcript||''});
+   }
   }
   return out;
 }
@@ -1590,7 +1683,7 @@ async function submitOrder(info,btn){
   const produits=cart.map(c=>`${c.name} (${c.size||'?'}) x${c.qty}`).join(', ');
   const orderItems=cart.map(c=>{
     const p=PRODS.find(x=>x.id===c.id);
-    return {id:c.id,name:c.name,qty:c.qty,price:c.price,format:c.size,buy_price:p?.buy||0,fourn:p?.fourn||null};
+    return {id:c.id,name:c.name,qty:c.qty,price:unitPrice(c),format:c.size,buy_price:p?.buy||0,fourn:p?.fourn||null};
   });
   const total=cartTotalAfterPromo();
   const promoCode=appliedPromo?appliedPromo.code:'';
@@ -2098,7 +2191,7 @@ function voiceClose(){
 // ═══ ASSISTANT VOCAL — une seule conversation pour tout commander (produits, nom, numéro, lieu) ═══
 // Le client parle : « la gamme White Up, je veux le lait et l'huile » → les produits sont reconnus, ajoutés, puis
 // l'assistant demande le nom, le numéro (qu'il répète pour vérifier), le lieu de livraison, et envoie la commande.
-const VA={open:false,phase:'order',basket:[],gamme:null,cat:null,name:'',tel:'',lieu:'',turns:[],pend:[],last:null,noHear:0,retried:false,restart:false,listening:false,rec:null,media:null,stream:null,chunks:[],mime:'',blob:null,err:'',sending:false,maxT:null,say:0,phoneFail:0,telOk:false,offer:null,lastQ:'',recP:null};
+const VA={open:false,phase:'order',gamme:null,cat:null,name:'',tel:'',lieu:'',turns:[],pend:[],last:null,noHear:0,retried:false,restart:false,listening:false,rec:null,media:null,stream:null,chunks:[],mime:'',blob:null,err:'',sending:false,maxT:null,say:0,phoneFail:0,telOk:false,offer:null,lastQ:'',recP:null};
 const VA_STOP=new Set('le la les l un une des de du d au aux et ou pour avec sans en je veux voudrais voulez prendre prends ajoute ajouter ajoutez mets mettre met donne donnez moi me encore aussi gamme produit produits svp stp s il te vous plait merci bonjour salut ca c est cest tout toi mon ma mes ton ta tes x fois'.split(' '));
 const vaStem=w=>w.replace(/[sx]$/,'');
 function vaTokMatch(a,b){a=vaStem(a);b=vaStem(b);if(a===b)return true;const m=Math.min(a.length,b.length);if(m>=4&&(a.startsWith(b)||b.startsWith(a)))return true;return m>=4&&_vDist(a,b)<=(Math.max(a.length,b.length)>=7?2:1);}
@@ -2108,8 +2201,12 @@ const vaNo=n=>/\b(non|pas|faux|erreur|recommence|change|modifier|corrige|incorre
 const vaDone=n=>/(commande|panier) (est |c est )?(bon|bonne|complet|complete|fini|finie|termine|terminee|prete|ok)|tout est bon|c est bon maintenant|on peut (envoyer|valider)|(valide|envoie|envoyer|valider) (ma |la )?commande|\b(c est tout|c est fini|c est bon|termine|termin|fini|finis|rien d autre|rien|non merci|voila|valide|valider|passer|suivant|j ai fini|ca sera tout|ca suffit|ca sera bon|stop)\b/.test(n);
 const $va=id=>document.getElementById(id);
 function vaStock(p,size){const v=(p.stock||{})[size];return (v===undefined||v===null)?null:+v;}
-function vaLabel(it){return it.qty+' '+it.name+(it.many&&it.size?' '+it.size:'');}
-function vaTotal(){return VA.basket.reduce((a,i)=>a+i.price*i.qty,0);}
+function vaLabel(it){return it.qty+' '+it.name+(vaMany(it)&&it.size?' '+it.size:'');}
+function vaTotal(){return VA.basket.reduce((a,i)=>a+unitPrice(i)*i.qty,0);}
+// Le panier vocal EST le panier normal : tout ce qui est ajouté à la voix apparaît dans le panier, et inversement.
+Object.defineProperty(VA,'basket',{get(){return cart;},set(v){cart=v;try{saveCart();updateCartUI();}catch(e){}},enumerable:true});
+let VA_USED=false; // la barre « commande vocale » n'apparaît qu'après une première utilisation de la voix
+const vaMany=it=>((PRODS.find(p=>p.id===it.id)||{}).sizes||[]).length>1;
 // ── parole (synthèse) : le micro ne s'ouvre qu'une fois la phrase terminée ──
 function vaSay(txt,next){
   const id=++VA.say;$va('vaSay').textContent=txt;
@@ -2181,9 +2278,12 @@ function vaTypeSubmit(){const i=$va('vaType');const t=(i.value||'').trim();if(!t
 async function vaOpen(opts){
   opts=opts||{};
   if(VA.open||window.__voiceOff)return;
-  Object.assign(VA,{open:true,phase:'order',basket:[],gamme:null,cat:null,name:'',tel:'',lieu:'',turns:[],pend:[],last:null,noHear:0,retried:false,restart:false,listening:false,sending:false,err:'',phoneFail:0,telOk:false,offer:null,lastQ:''});
+  const keep=VA.basket.length>0;
+  Object.assign(VA,{open:true,phase:'order',gamme:null,cat:null,pend:[],noHear:0,retried:false,restart:false,listening:false,sending:false,err:'',phoneFail:0,lastQ:''});
+  if(!keep)Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],last:null,telOk:false,offer:null});
   const pc=$va('page-catalog');
   if(pc&&pc.classList.contains('active')){VA.cat=currentCat||null;VA.gamme=window.CUR_GFILTER||null;}
+  if(opts.gamme)VA.gamme=opts.gamme;
   $va('vaSheet').style.display='flex';$va('vaHeard').textContent='';
   const R={added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
   if(opts.prod){vaAddItem(opts.prod,'',R,pmSelectedSize);}
@@ -2192,7 +2292,9 @@ async function vaOpen(opts){
   VA.recP=vaRecStart();
   try{fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.llm===false)VA_LLM_OFF=true;}).catch(()=>{});}catch(e){}
   const ex=PRODS.filter(p=>p.active!==false).slice(0,2).map((p,i)=>(i?'et un ':'deux ')+p.name).join(' ');
+  if(opts.silent)return;
   if(opts.prod&&VA.basket.length)vaAsk('J\'ai mis '+opts.prod.name+'. Combien en veux-tu ? Tu peux aussi ajouter d\'autres produits.');
+  else if(keep)vaAsk('Tu as déjà : '+VA.basket.map(vaLabel).join(', ')+'. Dis ce que tu veux ajouter, ou dis : c\'est tout.');
   else vaAsk('Dis-moi ce que tu veux.'+(ex?' Par exemple : '+ex+'.':'')+' Tu peux aussi dire le nom d\'une gamme.');
 }
 async function vaClose(){
@@ -2202,6 +2304,8 @@ async function vaClose(){
   try{if(VA.media&&VA.media.state!=='inactive'){VA.media.onstop=null;VA.media.stop();}}catch(e){}
   try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(e){}VA.stream=null;
   $va('vaSheet').style.display='none';
+  if(!VA.sending)VA.phase='order';
+  vaBarRender();
 }
 // ── reconnaissance des produits ──
 function vaScore(p,toks,ctx){
@@ -2266,7 +2370,8 @@ function vaAddItem(p,seg,R,sizeHint,qtyHint){
   const mx=st!==null?st:100000;
   if(qty+(ex?ex.qty:0)>mx){qty=Math.max(0,mx-(ex?ex.qty:0));R.notes.push('Pour '+p.name+', il n\'en reste que '+mx);if(qty<=0)return null;}
   let it;
-  if(ex){ex.qty+=qty;it=ex;}else{it={id:p.id,name:p.name,price:p.price,img:getProdImg(p)||'',size,qty,many:sizes.length>1};VA.basket.push(it);}
+  if(ex){ex.qty+=qty;it=ex;}else{it={id:p.id,name:p.name,price:p.price,img:getProdImg(p)||'',size,qty};VA.basket.push(it);}
+  VA_USED=true;try{saveCart();updateCartUI();}catch(e){}
   VA.last=it;R.added.push(vaLabel({...it,qty}));
   return it;
 }
@@ -2584,10 +2689,12 @@ function vaFinalAsk(prefix){
 
 // ── affichage ──
 function vaRender(){
+  try{saveCart();updateCartUI();}catch(e){}
+  vaBarRender();
   const b=$va('vaBasket');
   b.innerHTML=VA.basket.map((it,i)=>`<div class="va-row">
     ${it.img?`<img src="${it.img.replace(/"/g,'&quot;')}" alt="" onerror="this.style.visibility='hidden'"/>`:'<span class="va-noimg"></span>'}
-    <div class="va-nm"><b>${it.name}</b>${it.many?`<select onchange="vaSize(${i},this.value)">${((PRODS.find(p=>p.id===it.id)||{}).sizes||[]).map(s=>`<option${String(s)===String(it.size)?' selected':''}>${s}</option>`).join('')}</select>`:''}<span class="va-pr">${FMT(it.price*it.qty)}</span></div>
+    <div class="va-nm"><b>${it.name}</b>${vaMany(it)?`<select onchange="vaSize(${i},this.value)">${((PRODS.find(p=>p.id===it.id)||{}).sizes||[]).map(s=>`<option${String(s)===String(it.size)?' selected':''}>${s}</option>`).join('')}</select>`:''}<span class="va-pr">${FMT(it.price*it.qty)}</span></div>
     <div class="va-q"><button onclick="vaQty(${i},-1)">−</button><input type="number" min="1" value="${it.qty}" onchange="vaSetQty(${i},this.value)"/><button onclick="vaQty(${i},1)">+</button></div>
     <button class="va-del" onclick="vaDel(${i})" aria-label="Retirer">✕</button></div>`).join('')||'<div class="va-empty">Ton panier vocal est vide.</div>';
   $va('vaTotal').textContent=VA.basket.length?'Total : '+FMT(vaTotal()):'';
@@ -2600,7 +2707,7 @@ function vaRender(){
   $va('vaForm').style.display=delivery?'block':'none';
   if(delivery){[['vaNom',VA.name],['vaTel',VA.tel],['vaLieu',VA.lieu]].forEach(([id,v])=>{const e=$va(id);if(e&&document.activeElement!==e)e.value=v;});}
   const a=$va('vaActions');
-  if(VA.phase==='order')a.innerHTML=`<button class="vs-no" onclick="vaToCart()" ${VA.basket.length?'':'disabled'}>🛒 Au panier</button><button class="vs-yes" onclick="vaFinishOrder()" ${VA.basket.length?'':'disabled'}>✓ C'est tout</button>`;
+  if(VA.phase==='order')a.innerHTML=`<button class="vs-no" onclick="vaToCart()">🛒 Mon panier</button><button class="vs-yes" onclick="vaFinishOrder()" ${VA.basket.length?'':'disabled'}>✓ C'est tout</button>`;
   else a.innerHTML=`<button class="vs-no" onclick="VA.phase='order';vaRender();vaAsk('Dis ce que tu veux ajouter ou retirer.')">← Ma commande</button><button class="vs-yes" onclick="vaSendBtn()">✓ Envoyer</button>`;
 }
 function vaFinishOrder(){if(!VA.basket.length)return;try{speechSynthesis.cancel();}catch(e){}VA.say++;try{VA.rec&&VA.rec.abort();}catch(e){}VA.listening=false;vaMic(false);vaAdvance('D\'accord.');}
@@ -2612,19 +2719,7 @@ function vaSetQty(i,v){
 function vaSize(i,s){const it=VA.basket[i];if(!it)return;it.size=s;const p=PRODS.find(x=>x.id===it.id);const st=p?vaStock(p,s):null;if(st!==null&&st>0)it.qty=Math.min(it.qty,st);vaRender();}
 function vaDel(i){const it=VA.basket[i];VA.basket.splice(i,1);if(VA.last===it)VA.last=null;vaRender();}
 function vaField(k,v){VA[k]=v;if(k==='tel')VA.telOk=true;}
-function vaToCart(){
-  if(!VA.basket.length)return;
-  let n=0;
-  VA.basket.forEach(it=>{
-    const p=PRODS.find(x=>x.id===it.id);const st=p?vaStock(p,it.size):null;
-    const ex=cart.find(c=>c.id===it.id&&c.size===it.size);
-    let q=it.qty;if(st!==null&&st>0)q=Math.min(q,Math.max(0,st-(ex?ex.qty:0)));
-    if(q<=0)return;
-    if(ex)ex.qty+=q;else cart.push({id:it.id,name:it.name,price:it.price,img:it.img||'',qty:q,size:it.size});
-    n+=q;
-  });
-  saveCart();updateCartUI();vaClose();toast(n+' article(s) ajouté(s) au panier');
-}
+function vaToCart(){vaClose();setTimeout(()=>{try{openCart();}catch(e){}},50);}
 function vaSendBtn(){
   const nom=(VA.name||'').trim(),tel=(VA.tel||'').replace(/\D/g,''),lieu=(VA.lieu||'').trim();
   if(!VA.basket.length){toast('Ton panier est vide');return;}
@@ -2639,29 +2734,218 @@ async function vaSend(){
   try{VA.rec&&VA.rec.abort();}catch(e){}
   $va('vaSay').textContent='Envoi de ta commande…';
   await vaRecStop();
-  const saved=cart;
-  const items=VA.basket.map(it=>({id:it.id,name:it.name,price:it.price,img:it.img||'',qty:it.qty,size:it.size}));
-  if(VA.blob||VA.turns.length){
-    const key='v'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-    VOICE_CLIPS[key]={blob:VA.blob,mime:VA.mime,transcript:VA.turns.map(t=>'Client : '+t).join('\n'),label:'Commande vocale complète ('+items.length+' produit'+(items.length>1?'s':'')+')'};
-    items[0].clip=key;
+  const newKey=()=>'v'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  cart.forEach(it=>{it.clips=[];(it.hc||[]).forEach(h=>{const k=newKey();VOICE_CLIPS[k]={blob:(h.blob instanceof Blob)?h.blob:null,mime:h.mime,transcript:'Client : '+h.transcript,label:'Commande vocale — '+it.name,qty:it.qty};it.clips.push(k);});});
+  if(cart.length&&(VA.blob||VA.turns.length)){
+    const key=newKey();
+    VOICE_CLIPS[key]={blob:VA.blob,mime:VA.mime,transcript:VA.turns.map(t=>'Client : '+t).join('\n'),label:'Commande vocale complète ('+cart.length+' produit'+(cart.length>1?'s':'')+')'};
+    cart[0].clips.push(key);
   }
-  cart=items;
   const nom=VA.name.trim(),tel=VA.tel.replace(/\D/g,''),lieu=VA.lieu.trim();
   let ok=false;
   try{ok=await submitOrder({nom,tel,lieu},null);}catch(e){console.error(e);}
   VA.sending=false;
   if(ok){
-    cart=saved;saveCart();updateCartUI();
+    VA.turns=[];VA.blob=null;VA.name='';VA.tel='';VA.lieu='';VA.telOk=false;VA.pend=[];VA.last=null;VA.offer=null;VA_USED=false;
     try{localStorage.setItem('pu_cust',JSON.stringify({nom,tel,lieu}));}catch(e){}
     await vaClose();closeProdModal();nav('confirm');
     voiceSpeak('Merci '+nom.split(' ')[0]+' ! Ta commande est envoyée. On t\'appelle bientôt. Tu paies à la livraison.');
   }else{
-    cart=saved;saveCart();updateCartUI();
-    // le micro a été coupé : on garde la commande à l'écran pour réessayer avec le bouton
     VA.phase='final';vaRender();$va('vaSay').textContent='La commande n\'est pas partie. Vérifie ta connexion et appuie sur « Envoyer ».';
   }
 }
+
+// ═══ MAINTIENS APPUYÉ ET PARLE : comme un message vocal, sans ouvrir de fenêtre (on peut continuer à défiler) ═══
+function vaBarRender(){
+  const bar=$va('vaBar');if(!bar)return;
+  const n=VA.basket.reduce((a,i)=>a+i.qty,0);
+  if(!n||!VA_USED||VA.open||window.__voiceOff){bar.style.display='none';return;}
+  $va('vaBarTxt').textContent='🛒 '+n+' article'+(n>1?'s':'')+' · '+FMT(vaTotal());
+  bar.style.display='flex';
+}
+function vaReset(afterSend){
+  if(!afterSend&&VA.basket.length&&!confirm('Vider ton panier ?'))return;
+  Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],pend:[],last:null,telOk:false,offer:null,blob:null,phase:'order'});
+  vaBarRender();if(VA.open)vaRender();
+}
+const QT={on:false,stop:false,text:'',interim:'',rec:null,media:null,stream:null,chunks:[],mime:'',t0:0,retried:false,tm:null};
+const HOLD={t:null,active:false,swallow:false};
+function qtShow(on){const o=$va('vaQt');if(o)o.style.display=on?'flex':'none';}
+async function qtStart(){
+  if(VA.open||QT.on)return;
+  if(!_SR){toast('Ton téléphone ne comprend pas la voix ici. Touche le bouton pour ouvrir la commande vocale.');return;}
+  try{speechSynthesis.cancel();VA.say++;}catch(e){}
+  Object.assign(QT,{on:true,stop:false,text:'',interim:'',chunks:[],media:null,stream:null,retried:false,t0:Date.now()});
+  $va('vaQtTxt').textContent='';qtShow(true);
+  try{navigator.vibrate&&navigator.vibrate(30);}catch(e){}
+  await qtRecStart();
+  if(QT.stop){qtFinish();return;}
+  qtListen();
+}
+async function qtRecStart(){
+  try{
+    if(!navigator.mediaDevices||!window.MediaRecorder)return;
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});QT.stream=stream;
+    const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+    const m=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);QT.mime=m.mimeType||mt||'audio/webm';
+    m.ondataavailable=e=>{if(e.data&&e.data.size)QT.chunks.push(e.data);};
+    m.start(1000);QT.media=m;
+  }catch(e){QT.media=null;}
+}
+function qtListen(){
+  const r=new _SR();QT.rec=r;r.lang='fr-FR';r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+  r.onresult=e=>{
+    let fin='',inter='';
+    for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=' '+t;else inter+=' '+t;}
+    QT.text=fin.trim();QT.interim=inter.trim();
+    $va('vaQtTxt').textContent='« '+(QT.text+' '+QT.interim).trim()+' »';
+  };
+  r.onerror=e=>{
+    if(e.error==='audio-capture'&&QT.media&&!QT.retried){QT.retried=true;QT.restartNoRec=true;}
+    if(e.error==='not-allowed'||e.error==='service-not-allowed')QT.denied=true;
+  };
+  r.onend=()=>{
+    if(QT.restartNoRec){QT.restartNoRec=false;try{QT.media&&QT.media.state!=='inactive'&&(QT.media.onstop=null,QT.media.stop());}catch(x){}try{QT.stream&&QT.stream.getTracks().forEach(t=>t.stop());}catch(x){}QT.media=null;QT.chunks=[];if(!QT.stop){qtListen();return;}}
+    if(QT.on&&!QT.stop&&!QT.denied){try{qtListen();}catch(x){}return;} // le navigateur coupe après un silence : on relance tant que le doigt reste appuyé
+    clearTimeout(QT.tm);qtFinish();
+  };
+  try{r.start();}catch(e){}
+}
+function qtStop(){
+  if(!QT.on||QT.stop)return;QT.stop=true;
+  if(Date.now()-QT.t0<700){toast('Garde le doigt appuyé pendant que tu parles');}
+  try{QT.rec&&QT.rec.stop();}catch(e){}
+  clearTimeout(QT.tm);QT.tm=setTimeout(qtFinish,1800); // sécurité si le navigateur ne répond pas
+}
+async function qtFinish(){
+  if(!QT.on)return;QT.on=false;clearTimeout(QT.tm);qtShow(false);
+  try{QT.rec&&(QT.rec.onend=null,QT.rec.abort());}catch(e){}
+  const media=QT.media;let blob=null;
+  await new Promise(res=>{
+    const fin=()=>{try{QT.stream&&QT.stream.getTracks().forEach(t=>t.stop());}catch(e){}QT.stream=null;if(QT.chunks.length)blob=new Blob(QT.chunks,{type:QT.mime||'audio/webm'});res();};
+    if(media&&media.state!=='inactive'){media.onstop=fin;try{media.stop();}catch(e){fin();}}else fin();
+  });
+  const text=(QT.text+' '+QT.interim).trim();
+  if(QT.denied){QT.denied=false;toast('Autorise le micro dans ton navigateur');return;}
+  if(!text){toast('Je n\'ai rien entendu. Garde le doigt appuyé en parlant.');return;}
+  qtProcess(text,blob?{blob,mime:QT.mime,transcript:text}:{blob:null,mime:'',transcript:text});
+}
+async function qtProcess(text,clip){
+  VA.phase='order';VA.pend=[];
+  VA.turns.push(text);
+  $va('vaBarTxt').textContent='… je réfléchis';$va('vaBar').style.display='flex';
+  let I=await vaLLM(text,[text]);
+  if(!I)I=vaRuleIntent(text);
+  const needsSheet=I.name||I.tel||I.lieu||I.redo||I.finish||I.yes||I.no||VA.pend.length;
+  if(needsSheet){ // la phrase demande un échange (nom, numéro, « c'est tout »…) : on ouvre l'assistant et il continue
+    VA.holdPending=clip;
+    await vaOpen({silent:true});
+    vaAttachClip(clip,I);
+    vaApply(I,text,[text]);
+    return;
+  }
+  const R=I.R||{added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  if(I.offer)VA.offer=I.offer;
+  if(I.ops){
+    I.ops.adds.forEach(a=>vaAddItem(a.p,'',R,a.size,a.qty));
+    I.ops.removes.forEach(id=>{const it=VA.basket.find(x=>x.id===id);if(it){VA.basket=VA.basket.filter(x=>x!==it);if(VA.last===it)VA.last=null;R.removed.push(it.name);}});
+    I.ops.setQty.forEach(a=>{const it=VA.basket.find(x=>x.id===a.id);if(it){const p=PRODS.find(x=>x.id===a.id),st=p?vaStock(p,it.size):null;it.qty=Math.min(a.qty,st!==null&&st>0?st:100000);VA.last=it;R.changed.push(vaLabel(it));}});
+  }
+  const changed=R.added.length||R.changed.length||R.removed.length;
+  if(changed){VA.offer=null;vaAttachClip(clip,I);}
+  vaBarRender();
+  const msg=(I.answer&&!changed?I.answer:vaSummary(R))||I.answer||'';
+  if(!msg){toast('Je n\'ai pas compris. Maintiens appuyé et redis-le.');vaBarRender();return;}
+  vaToast(msg);
+  vaSpeakQuiet(msg);
+}
+function vaAttachClip(clip,I){
+  if(!clip||!VA.last)return;
+  if(!VA.last.hc)Object.defineProperty(VA.last,'hc',{value:[],writable:true,enumerable:false});
+  VA.last.hc.push(clip);
+}
+function vaToast(msg){const t=$va('vaBarTxt');if(t){t.textContent=msg;}$va('vaBar').style.display='flex';clearTimeout(vaToast.t);vaToast.t=setTimeout(vaBarRender,5000);}
+function vaSpeakQuiet(txt){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='fr-FR';u.rate=.95;speechSynthesis.speak(u);}catch(e){}}
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest&&e.target.closest('.va-hold');
+  if(!b||VA.open||window.__voiceOff)return;
+  HOLD.active=false;clearTimeout(HOLD.t);
+  HOLD.t=setTimeout(()=>{HOLD.active=true;qtStart();},380);
+});
+const holdEnd=()=>{clearTimeout(HOLD.t);if(HOLD.active){HOLD.active=false;HOLD.swallow=true;setTimeout(()=>{HOLD.swallow=false;},600);qtStop();}};
+document.addEventListener('pointerup',holdEnd);
+document.addEventListener('pointercancel',holdEnd);
+document.addEventListener('click',e=>{if(HOLD.swallow&&e.target.closest&&e.target.closest('.va-hold')){e.preventDefault();e.stopPropagation();HOLD.swallow=false;}},true);
+document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('.va-hold'))e.preventDefault();});
+// petite bulle d'aide, une seule fois par visite
+setTimeout(()=>{try{if(window.__voiceOff||sessionStorage.getItem('va_hint'))return;sessionStorage.setItem('va_hint','1');const h=$va('vaHint');if(!h)return;h.style.display='block';setTimeout(()=>{h.style.display='none';},6500);}catch(e){}},4000);
+
+// ═══ PAGE DES GAMMES : chaque gamme avec tous ses produits réunis ═══
+function gammesWithProducts(){
+  return SITE_GAMMES.filter(g=>g.active!==false).map(g=>({g,ps:PRODS.filter(p=>p.active!==false&&p.gamme===g.id)})).filter(x=>x.ps.length);
+}
+function renderGammesPage(){
+  const list=gammesWithProducts();
+  const others=PRODS.filter(p=>p.active!==false&&!p.gamme||!SITE_GAMMES.find(g=>g.id===p.gamme&&g.active!==false)).filter(p=>p.active!==false);
+  const chips=document.getElementById('gmChips'),body=document.getElementById('gmBody');
+  if(!chips||!body)return;
+  chips.innerHTML=list.map(({g})=>`<button class="gm-chip" onclick="gmJump('${g.id}')">${esc(g.name)}</button>`).join('')+(list.length&&others.length?'<button class="gm-chip" onclick="gmJump(\'autres\')">Autres produits</button>':'');
+  const sec=(id,name,desc,img,ps,gid)=>`<section class="gm-sec" id="gm-${id}">
+    <div class="gm-hd"><div class="gm-bg${img?' img':''}"${img?` style="background-image:url('${String(img).replace(/'/g,'%27')}')"`:''}></div>
+      <div><div class="gm-eyebrow">${ps.length} produit${ps.length>1?'s':''}</div><div class="gm-title">${esc(name)}</div>${desc?`<div class="gm-desc">${esc(desc)}</div>`:''}</div>
+      <div class="gm-btns"><button class="gm-btn pri" onclick="gmAddAll('${id}')">Tout ajouter au panier</button>${gid?`<button class="gm-btn" onclick="gmVoice('${gid}')">${`<svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/></svg>`}Commander à la voix</button>`:''}</div>
+    </div>
+    <div class="gm-grid">${ps.map(pcHTML).join('')}</div></section>`;
+  let html=list.map(({g,ps})=>sec(g.id,g.name,g.description,g.img,ps,g.id)).join('');
+  if(others.length)html+=sec('autres',list.length?'Autres produits':'Tous nos produits','','',others,'');
+  body.innerHTML=html||'<p style="padding:3rem 0;color:var(--g5)">Aucune gamme pour le moment.</p>';
+}
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function gmJump(id){const e=document.getElementById('gm-'+id);if(e)e.scrollIntoView({behavior:'smooth',block:'start'});}
+function gmProducts(id){return id==='autres'?PRODS.filter(p=>p.active!==false&&(!p.gamme||!SITE_GAMMES.find(g=>g.id===p.gamme&&g.active!==false))):PRODS.filter(p=>p.active!==false&&p.gamme===id);}
+function gmAddAll(id){
+  let n=0,skipped=0;
+  gmProducts(id).forEach(p=>{
+    const sizes=(p.sizes||[]).map(String);
+    const size=sizes.find(s=>{const v=(p.stock||{})[s];return v===undefined||v===null||v>0;});
+    if(sizes.length&&size===undefined){skipped++;return;}
+    const sz=size||sizes[0]||'';
+    const st=(p.stock||{})[sz];
+    const ex=cart.find(c=>c.id===p.id&&c.size===sz);
+    if(st!==undefined&&st!==null&&(ex?ex.qty:0)+1>st){skipped++;return;}
+    if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,price:p.price,img:getProdImg(p)||'',qty:1,size:sz});
+    try{trackEvent('cart',p.id);}catch(e){}
+    n++;
+  });
+  saveCart();updateCartUI();
+  toast(n?n+' produit'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+' au panier'+(skipped?' ('+skipped+' en rupture)':''):'Rien à ajouter (rupture de stock)');
+}
+function gmVoice(gid){vaOpen({gamme:gid});}
+
+// ═══ ACCUEIL : deux rangées de produits (prix en détail, puis produits en gros) ═══
+function pcGros(p){
+  let h=pcHTML(p);
+  const save=p.price>0?Math.round((1-p.gros/p.price)*100):0;
+  const price=`<div class="pc-price"><span class="pp">${FMT(p.gros)}</span><span class="pold">${FMT(p.price)}</span>${save>0?`<span class="pdsc">-${save}%</span>`:''}</div><div class="pc-gros">à partir de <b>${p.grosMin}</b> pièces</div>`;
+  h=h.replace(/<div class="pc-price">[\s\S]*?<\/span><\/div>/,price);
+  const btn=`<button class="pc-gros-btn" onclick="event.stopPropagation();addGros(${p.id})">+ Ajouter ${p.grosMin}</button>`;
+  return h.replace('<div class="pc-sw">',btn+'<div class="pc-sw">');
+}
+function addGros(id){
+  const p=PRODS.find(x=>x.id===id);if(!p||!(p.grosMin>0))return;
+  const sizes=(p.sizes||[]).map(String);
+  const size=sizes.find(s=>{const v=(p.stock||{})[s];return v===undefined||v===null||v>=p.grosMin;});
+  if(sizes.length&&size===undefined){toast('Stock insuffisant pour la quantité de gros ('+p.grosMin+')');return;}
+  const sz=size||sizes[0]||'';
+  const ex=cart.find(c=>c.id===p.id&&c.size===sz);
+  const st=(p.stock||{})[sz];
+  if(st!==undefined&&st!==null&&(ex?ex.qty:0)+p.grosMin>st){toast('Stock insuffisant : '+st+' disponible(s)');return;}
+  if(ex)ex.qty+=p.grosMin;else cart.push({id:p.id,name:p.name,price:p.price,img:getProdImg(p)||'',qty:p.grosMin,size:sz});
+  try{trackEvent('cart',p.id);}catch(e){}
+  saveCart();updateCartUI();toast(p.grosMin+' × '+p.name+' ajoutés (prix de gros)');
+}
+function hrowScroll(id,d){const e=document.getElementById(id);if(e)e.scrollBy({left:d*Math.max(260,e.clientWidth*.8),behavior:'smooth'});}
+function goGamme(id){nav('gammes');setTimeout(()=>gmJump(id),450);}
 
 function closeProdModal(e){
   if(e&&e.target!==document.getElementById("prodModal"))return;
@@ -2700,6 +2984,7 @@ async function loadAllData(){
       price:Number(p.price)||0,
       buy:Number(p.buy_price)||0,
       old:Number(p.old_price)||0,
+      gros:Number(p.wholesale_price)||0,grosMin:parseInt(p.wholesale_min,10)||0,
       badge:p.badge||'',
       colors:p.colors||['#0a0a0a'],
       sizes:p.sizes||['Unique'],
@@ -2813,7 +3098,8 @@ function renderNavLinks(){
     .filter(n=>standaloneIds.includes(n.link)&&!n.isCategory)
     .map(n=>({id:n.id,label:n.label,goCall:`nav('${n.link}')`,highlight:n.highlight}));
 
-  const items=[...catItems,...pageItems];
+  const gmItem=(typeof gammesWithProducts==='function'&&gammesWithProducts().length)?[{id:'gammes',label:'Gammes',goCall:"nav('gammes')"}]:[];
+  const items=[...catItems,...gmItem,...pageItems];
 
   if(list){
     list.innerHTML=items.map(n=>
@@ -2822,7 +3108,7 @@ function renderNavLinks(){
   }
   // Footer « Collections » : mêmes catégories que le menu
   const footEl=document.getElementById('footCatLinks');
-  if(footEl) footEl.innerHTML=catItems.map(n=>`<a onclick="${n.goCall}">${n.label}</a>`).join('');
+  if(footEl) footEl.innerHTML=[...catItems,...gmItem].map(n=>`<a onclick="${n.goCall}">${n.label}</a>`).join('');
   if(mobileEl){
     mobileEl.innerHTML=items.map(n=>
       `<div class="mob-a" onclick="${n.goCall};closeMob()" style="${n.highlight?'color:var(--red)':''}">${n.label}</div>`
@@ -2850,7 +3136,6 @@ function renderHeroSlides(){
         ${s.eyebrow?`<div style="font-size:.52rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--red);margin-bottom:.8rem;display:flex;align-items:center;gap:10px"><span style="width:20px;height:1px;background:var(--red);display:inline-block"></span>${s.eyebrow}</div>`:''}
         <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:900;line-height:.86;color:var(--w);letter-spacing:.02em;text-transform:uppercase;margin-bottom:.8rem">${(s.title||'').replace(/\n/g,'<br/>')}</h2>
         <p style="font-size:.76rem;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.6rem;max-width:340px">${s.subtitle||''}</p>
-        <div><button class="btn-red" onclick="event.stopPropagation();nav2OrCat('${s.link}')">${s.cta||'Découvrir →'}</button></div>
       </div>
     </div>`).join('');
   if(dots){
@@ -2926,7 +3211,7 @@ function renderPayMethods(s){
 }
 
 function applySiteSettings(s){
-  window.__voiceOff=(s.voice_enabled===false);const vr=document.getElementById('pmVoiceRow');if(vr)vr.style.display=window.__voiceOff?'none':'flex';const vf=document.getElementById('vaFab');if(vf)vf.style.display=window.__voiceOff?'none':'';document.querySelectorAll('.va-inline,.va-inline-wrap').forEach(e=>{e.style.display=window.__voiceOff?'none':''});
+  window.__voiceOff=(s.voice_enabled===false);const vr=document.getElementById('pmVoiceRow');if(vr)vr.style.display=window.__voiceOff?'none':'flex';const vf=document.getElementById('vaFab');if(vf)vf.style.display=window.__voiceOff?'none':'';document.querySelectorAll('.va-inline,.va-inline-wrap,.home-voc').forEach(e=>{e.style.display=window.__voiceOff?'none':''});vaBarRender();
   // Nom de la boutique (Admin > Paramètres > Informations boutique > Nom)
   if(s.shop_name&&s.shop_name.trim()){
     SHOP_NAME=s.shop_name.trim();
@@ -3021,24 +3306,33 @@ let SITE_CATS=[];
 function renderCatsGrid(){
   const grid=document.getElementById('homeCatsGrid');
   if(!grid)return;
-  // Uniquement les catégories actives présentes en base — rien de codé en dur
-  const cats=SITE_CATS.filter(c=>c.active!==false);
+  // On préfère les GAMMES (avec leurs produits). S'il n'y en a pas, on montre les catégories actives.
+  const gm=(typeof gammesWithProducts==='function')?gammesWithProducts():[];
+  let items;
+  if(gm.length){
+    items=gm.map(({g,ps})=>{const first=ps.find(p=>getProdImg(p));return {name:g.name,img:g.img||(first?getProdImg(first):''),go:`goGamme('${g.id}')`,voc:`gmVoice('${g.id}')`,sub:ps.length+' produit'+(ps.length>1?'s':'')};});
+  }else{
+    items=SITE_CATS.filter(c=>c.active!==false).map(c=>({name:c.name,img:c.img||'',go:`showCat('${c.id}')`,voc:`vaOpen()`,sub:''}));
+  }
+  const title=document.getElementById('homeCatsTitle');
+  if(title)title.textContent=gm.length?'Nos Gammes':'Nos Catégories';
   const sec=grid.closest('.si');
-  if(sec)sec.style.display=cats.length?'':'none';
+  if(sec)sec.style.display=items.length?'':'none';
   // Boucle infinie : la liste est répétée pour remplir la largeur, puis dupliquée une fois.
   // Quand on atteint la fin de la 1re moitié, on revient (sans saut visible) au début.
   const W=grid.clientWidth||window.innerWidth;
   const tileW=window.innerWidth>768?Math.max(250,W/4):W*.78;
-  const reps=cats.length>1?Math.max(1,Math.ceil((W+tileW)/(cats.length*(tileW+10)))):1;
-  const base=[];for(let i=0;i<reps;i++)base.push(...cats);
-  const shown=cats.length>1?[...base,...base]:cats;
+  const reps=items.length>1?Math.max(1,Math.ceil((W+tileW)/(items.length*(tileW+10)))):1;
+  const base=[];for(let i=0;i<reps;i++)base.push(...items);
+  const shown=items.length>1?[...base,...base]:items;
   grid.innerHTML=shown.map(c=>`
-    <div class="cat-tile" onclick="showCat('${c.id}')">
-      ${c.img?`<img src="${c.img}" alt="" loading="lazy"/>`:''}
+    <div class="cat-tile" onclick="${c.go}">
+      ${c.img?`<img src="${c.img}" alt="" loading="lazy" onerror="this.style.display='none'"/>`:''}
       <div class="ct-shade"></div>
       <div class="ct-body">
-        <div class="ct-name">${c.name}</div>
-        <button class="btn-red" style="font-size:.55rem;padding:8px 16px" onclick="event.stopPropagation();showCat('${c.id}')">Découvrir →</button>
+        <div class="ct-name">${esc(c.name)}</div>
+        ${c.sub?`<div style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:.5rem">${c.sub}</div>`:''}
+        <button class="btn-red" style="font-size:.55rem;padding:8px 16px" onclick="event.stopPropagation();${c.go}">Découvrir →</button>
       </div>
     </div>`).join('');
   startCatsAutoScroll(grid);
