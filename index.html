@@ -497,7 +497,7 @@ select.mf-input option{background:#111;color:#fff}
 #vaFab{position:fixed;left:14px;bottom:14px;z-index:640;display:flex;align-items:center;gap:8px;padding:13px 18px;border:none;border-radius:40px;background:var(--red);color:var(--k);font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.28)}
 #vaFab .mic-ico{margin:0;width:22px;height:22px}
 @media(max-width:520px){#vaFab{padding:14px;bottom:76px}#vaFab span{display:none}}
-.va-hold{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.va-hold{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
 #vaQt{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:150px;z-index:10070;background:#d62828;color:#fff;padding:12px 18px;border-radius:14px;max-width:92vw;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(0,0,0,.4);font-size:.95rem}
 #vaQt #vaQtTxt{font-size:.85rem;font-style:italic;opacity:.95;margin-top:3px;max-height:4.5em;overflow:hidden}
 .qt-dot{width:16px;height:16px;border-radius:50%;background:#fff;flex-shrink:0;animation:vspulse 1s infinite}
@@ -559,7 +559,7 @@ select.mf-input option{background:#111;color:#fff}
 #vaSheet .va-box{position:relative;background:#fff;width:100%;max-width:480px;max-height:97vh;overflow:auto;padding:1.1rem 1rem;text-align:center;border-top:4px solid var(--red)}
 #vaSheet .vs-x{position:absolute;top:6px;right:10px;background:none;border:none;font-size:1.5rem;cursor:pointer}
 .va-title{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-#vaMic{width:84px;height:84px;margin:.2rem auto;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none}
+#vaMic{width:84px;height:84px;margin:.2rem auto;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #vaMic .mic-ico{width:40px;height:40px;margin:0}
 .va-type{display:flex;gap:6px;margin:.3rem 0 .6rem}.va-type input{flex:1;padding:12px;border:1.5px solid var(--w3);font-size:.9rem;min-width:0}.va-type button{padding:0 16px;border:none;background:var(--k);color:#fff;font-weight:800;cursor:pointer}
 .va-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:.3rem 0}.va-chip-t{width:100%;font-size:.75rem;font-weight:800;color:var(--g5)}
@@ -594,6 +594,7 @@ select.mf-input option{background:#111;color:#fff}
   <div id="vaMicHint" class="va-mhint">Maintiens le micro appuyé pour parler, relâche quand tu as fini</div>
   <div id="vaHeard" class="vs-heard"></div>
   <div id="vaLog" aria-live="polite"></div>
+  <div id="vaDiag" style="font-size:.6rem;color:#999;min-height:.8rem"></div>
   <div class="va-type"><input id="vaType" type="text" placeholder="Ou écris ici (ex : 2 savon noir et 1 huile)" onkeydown="if(event.key==='Enter')vaTypeSubmit()"/><button onclick="vaTypeSubmit()">OK</button></div>
   <button id="vaSwitch" class="va-switch" onclick="vaSwitchVoice()">🎤 Passer à la voix</button>
   <div id="vaChips" class="va-chips"></div>
@@ -1676,7 +1677,7 @@ async function uploadVoiceClips(orderId){
     let url='';
     if(v.blob){
       try{
-        const ext=(v.mime||'').includes('mp4')?'m4a':(v.mime||'').includes('ogg')?'ogg':'webm';
+        const ext=(v.mime||'').includes('wav')?'wav':(v.mime||'').includes('mp4')?'m4a':(v.mime||'').includes('ogg')?'ogg':'webm';
         const path=`${orderId}/${n}-${Date.now().toString(36)}.${ext}`;
         const {error}=await sb.storage.from('voice-orders').upload(path,v.blob,{contentType:(v.mime||'audio/webm').split(';')[0],upsert:false});
         if(error)throw error;
@@ -1700,6 +1701,7 @@ async function submitOrder(info,btn){
   });
   const total=cartTotalAfterPromo();
   const promoCode=appliedPromo?appliedPromo.code:'';
+  try{await vaPrepClips();}catch(e){console.warn('Audio non préparé',e);}
   const clips=await uploadVoiceClips(orderId);
   const orderObj={id:orderId,date:new Date().toISOString().split('T')[0],client:info.nom,phone:info.tel,products:produits,items:orderItems,total,payment:'Paiement à la livraison',status:'pending',payment_status:'pending',adresse:info.lieu,notes:promoCode?`Code promo: ${promoCode}`:'',channel:clips.length?'vocal':'site',voice_clips:clips};
   let saved=false;
@@ -1717,7 +1719,7 @@ async function submitOrder(info,btn){
   }
   document.getElementById("confirmId").textContent="#"+orderId;
   cart=[];saveCart();updateCartUI();appliedPromo=null;
-  Object.keys(VOICE_CLIPS).forEach(k=>delete VOICE_CLIPS[k]);
+  Object.keys(VOICE_CLIPS).forEach(k=>delete VOICE_CLIPS[k]);VA.clips=[];VA.prepKey=null;
   done();
   trackEvent('order',null);
   return true;
@@ -1959,10 +1961,33 @@ const _SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 // 2) « rec » : le téléphone enregistre la voix et notre serveur la transforme en texte (Firefox, Facebook/Instagram/TikTok intégrés, WebView, anciens téléphones)
 // 3) « none »: pas de micro utilisable (Opera Mini…) → commande écrite automatiquement
 const _UA=navigator.userAgent||'';
+const IS_ANDROID=/Android/i.test(_UA);
+// Sur Android, le micro ne peut servir qu'à une seule chose à la fois : on n'enregistre donc PAS en même temps que la reconnaissance vocale.
+function vaMicMark(){try{localStorage.setItem('va_mic_ok','1');}catch(e){}}
+async function vaMicReady(){
+  try{if(navigator.permissions&&navigator.permissions.query){const st=await navigator.permissions.query({name:'microphone'});if(st.state==='granted'){vaMicMark();return true;}return false;}}catch(e){}
+  try{return localStorage.getItem('va_mic_ok')==='1';}catch(e){return false;}
+}
+function vaDiag(t){const e=document.getElementById('vaDiag');if(e)e.textContent=t||'';vaDbg('diag: '+(t||''));}
+// Mode diagnostic : ouvre le site avec ?debug=1 pour voir en bas de l'écran ce que fait la voix (utile pour dépanner un téléphone)
+const VA_DEBUG=/[?&]debug=1/.test(location.search);const VA_DBG=[];
+function vaDbg(m){
+  if(!VA_DEBUG)return;VA_DBG.push(new Date().toLocaleTimeString().slice(0,8)+' '+m);while(VA_DBG.length>9)VA_DBG.shift();
+  let e=document.getElementById('vaDbgBox');
+  if(!e){e=document.createElement('div');e.id='vaDbgBox';e.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(0,0,0,.85);color:#7CFC00;font:10px/1.35 monospace;padding:4px 6px;max-height:34vh;overflow:auto;white-space:pre-wrap;pointer-events:none';(document.body||document.documentElement).appendChild(e);}
+  e.textContent=VA_DBG.join('\n');
+}
+window.addEventListener('error',e=>vaDbg('ERREUR JS: '+(e.message||'')+' @'+(e.lineno||'')));
+window.addEventListener('unhandledrejection',e=>vaDbg('PROMESSE: '+((e.reason&&e.reason.message)||e.reason)));
 const _SR_BAD=/FBAN|FBAV|FB_IAB|Instagram|TikTok|musical_ly|Bytedance|Snapchat|MicroMessenger|Line\/|;\s*wv\)|UCBrowser|Opera Mini|OPiOS|Firefox|FxiOS/i.test(_UA);
 const CAN_REC=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
-let VA_FORCE_REC=false,VA_STT_ON=null;
+let VA_FORCE_REC=false,VA_STT_ON=null,VA_STT_FAIL=0;
+const VA_FORCE=(location.search.match(/[?&]moteur=(sr|rec)/)||[])[1]; // ?moteur=sr ou ?moteur=rec : pour comparer les deux méthodes sur un téléphone
 function vaEngine(){
+  if(VA_FORCE==='sr'&&_SR)return 'sr';
+  if(VA_FORCE==='rec'&&CAN_REC)return 'rec';
+  // Android : si le serveur sait transcrire, on enregistre (texte + audio gardé pour l'admin) ; sinon reconnaissance du navigateur sans audio.
+  if(IS_ANDROID&&CAN_REC&&VA_STT_ON===true)return 'rec';
   if(_SR&&!_SR_BAD&&!VA_FORCE_REC)return 'sr';
   if(CAN_REC&&VA_STT_ON!==false)return 'rec';
   if(_SR&&!VA_FORCE_REC)return 'sr';
@@ -1978,8 +2003,8 @@ async function rcStart(){
     const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
     const m=new MediaRecorder(st,mt?{mimeType:mt}:undefined);RC.mime=m.mimeType||mt||'audio/webm';
     const ch=RC.chunks;m.ondataavailable=e=>{if(e.data&&e.data.size)ch.push(e.data);};
-    m.start(300);RC.rec=m;return true;
-  }catch(e){VA.err=(e&&e.name)||'';RC.rec=null;return false;}
+    m.start(300);RC.rec=m;vaMicMark();return true;
+  }catch(e){VA.err=(e&&e.name)||'';RC.rec=null;vaDbg('enregistrement impossible: '+((e&&e.name)||'')+' '+((e&&e.message)||''));return false;}
 }
 function rcStop(){
   const m=RC.rec,chunks=RC.chunks,mime=RC.mime,own=RC.own,stream=RC.stream;RC.rec=null;RC.chunks=[];RC.stream=null;
@@ -1991,20 +2016,27 @@ function rcStop(){
 function rcLevel(stream){
   try{
     const AC=window.AudioContext||window.webkitAudioContext;if(!AC||!stream)return null;
-    const ac=new AC();const src=ac.createMediaStreamSource(stream);const an=ac.createAnalyser();an.fftSize=1024;src.connect(an);
+    const ac=new AC();try{ac.resume&&ac.resume();}catch(e){}const src=ac.createMediaStreamSource(stream);const an=ac.createAnalyser();an.fftSize=1024;src.connect(an);
     const buf=new Uint8Array(an.fftSize);
     return {get(){an.getByteTimeDomainData(buf);let m=0;for(let i=0;i<buf.length;i++){const v=Math.abs(buf[i]-128)/128;if(v>m)m=v;}return m;},close(){try{ac.close();}catch(e){}}};
   }catch(e){return null;}
 }
 async function sttServer(blob,mime){
   if(!blob||blob.size<800)return '';
-  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),25000);
-  try{
-    const r=await fetch(NLU_SERVER+'/api/voice-stt',{method:'POST',headers:{'Content-Type':(mime||blob.type||'audio/webm').split(';')[0]},body:blob,signal:ctl.signal});
-    if(r.status===501){VA_STT_ON=false;return '';}
-    if(!r.ok)return '';
-    const j=await r.json();return String(j.text||'').trim();
-  }catch(e){return '';}finally{clearTimeout(to);}
+  for(let essai=0;essai<2;essai++){ // une 2e tentative si le serveur est occupé ou se réveille
+    const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),essai?20000:25000);
+    try{
+      const r=await fetch(NLU_SERVER+'/api/voice-stt',{method:'POST',headers:{'Content-Type':(mime||blob.type||'audio/webm').split(';')[0]},body:blob,signal:ctl.signal});
+      vaDbg('serveur voix → HTTP '+r.status+' · '+(blob.size)+' octets · essai '+(essai+1));
+      if(r.status===501){VA_STT_ON=false;return '';}
+      if(r.ok){VA_STT_FAIL=0;const j=await r.json();return String(j.text||'').trim();}
+      if(r.status===400)return '';
+    }catch(e){vaDbg('serveur voix → échec réseau '+((e&&e.name)||''));}
+    finally{clearTimeout(to);}
+    if(essai===0)await new Promise(ok=>setTimeout(ok,1500));
+  }
+  if(++VA_STT_FAIL>=3)VA_STT_ON=false; // le serveur ne répond vraiment pas : retour à la reconnaissance du navigateur
+  return '';
 }
 function voiceSpeak(txt,onend){
   let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(tm);onend&&onend();};
@@ -2287,18 +2319,15 @@ function vaSay(txt,next){
     const u=new SpeechSynthesisUtterance(txt);u.lang='fr-FR';if(fv)u.voice=fv;u.rate=.95;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);
   }catch(e){fin();}
 }
-const vaAsk=(txt)=>{VA.lastQ=txt;vaSay(txt,()=>vaListen());};
+const vaAsk=(txt)=>{VA.lastQ=txt;vaSay(txt,()=>{if(IS_ANDROID)setTimeout(()=>{if(VA.open)vaListen();},450);else vaListen();});};
 // ── enregistrement audio de toute la conversation ──
 async function vaRecStart(){
   VA.chunks=[];VA.blob=null;VA.media=null;
+  if(IS_ANDROID&&vaEngine()==='sr')return; // Android : le micro reste libre pour la reconnaissance vocale
   try{
-    if(!navigator.mediaDevices||!window.MediaRecorder)return;
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});VA.stream=stream;
-    const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
-    const m=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);VA.mime=m.mimeType||mt||'audio/webm';
-    m.ondataavailable=e=>{if(e.data&&e.data.size)VA.chunks.push(e.data);};
-    m.start(2000);VA.media=m;
-  }catch(e){VA.media=null;VA.err=(e&&e.name)||'';}
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return;
+    VA.stream=await navigator.mediaDevices.getUserMedia({audio:true});vaMicMark();
+  }catch(e){VA.err=(e&&e.name)||'';}
 }
 function vaRecStop(){
   return new Promise(res=>{
@@ -2313,25 +2342,26 @@ async function vaListen(){
   if(!VA.open||VA.listening||VA.txt)return;
   VA.listening=true;try{await VA.recP;}catch(e){}VA.listening=false;
   if(!VA.open||VA.listening)return;
-  const eng=vaEngine();
+  const eng=vaEngine();vaDbg('écoute · moteur='+eng+' · android='+IS_ANDROID+' · stt='+VA_STT_ON+' · SR='+!!_SR+(_SR_BAD?' (SR écarté)':''));
   if(eng==='none'){vaNoVoice();return;}
   if(eng==='rec'){return vaListenRec();}
   try{speechSynthesis.cancel();VA.say++;}catch(e){}
-  VA.listening=true;vaMic(true);$va('vaSay').textContent='🎤 Je t\'écoute…';
+  VA.listening=true;vaMic(true);$va('vaSay').textContent='🎤 Je t\'écoute…';vaClipStart();
   const r=new _SR();VA.rec=r;r.lang='fr-FR';r.interimResults=false;r.maxAlternatives=3;
   let got=null;
-  r.onresult=e=>{const a=[];for(let k=0;k<e.results[0].length;k++){let t='';for(let i=0;i<e.results.length;i++)t+=' '+(e.results[i][k]||e.results[i][0]).transcript;a.push(t.trim());}got=a;};
+  r.onresult=e=>{vaMicMark();const a=[];for(let k=0;k<e.results[0].length;k++){let t='';for(let i=0;i<e.results.length;i++)t+=' '+(e.results[i][k]||e.results[i][0]).transcript;a.push(t.trim());}got=a;};
   r.onerror=e=>{
-    VA.err=e.error||'';
+    VA.err=e.error||'';vaDiag('micro : '+(e.error||'?'));vaDbg('SR erreur: '+(e.error||'?'));
     if(/service-not-allowed|language-not-supported|network/.test(e.error||''))VA_FORCE_REC=true;
-    if(e.error==='audio-capture'&&VA.media&&!VA.retried){VA.retried=true;VA.restart=true;}
+    if(e.error==='audio-capture'&&(VA.media||VA.stream)&&!VA.retried){VA.retried=true;VA.restart=true;}
   };
   r.onend=async()=>{
+    const clipP=vaClipStop();
     clearTimeout(VA.maxT);VA.listening=false;vaMic(false);
     if(VA_FORCE_REC&&!got&&VA.open&&vaEngine()!=='sr'){setTimeout(vaListen,200);return;}
     if(VA.restart){VA.restart=false;try{VA.media&&VA.media.state!=='inactive'&&(VA.media.onstop=null,VA.media.stop());}catch(e){}try{VA.stream&&VA.stream.getTracks().forEach(t=>t.stop());}catch(e){}VA.media=null;VA.chunks=[];VA.blob=null;setTimeout(vaListen,300);return;}
     if(!VA.open)return;
-    if(got)vaHandle(got);else vaNoSpeech();
+    if(got){const c=await clipP;vaHandle(got,c);}else vaNoSpeech();
   };
   clearTimeout(VA.maxT);VA.maxT=setTimeout(()=>{try{r.stop();}catch(e){}},14000);
   try{r.start();}catch(e){VA.listening=false;vaMic(false);}
@@ -2352,28 +2382,95 @@ async function vaListenRec(){
   const ok=await rcStart();
   if(!ok||!VA.open){VA.listening=false;vaMic(false);if(VA.open){if(VA.err==='NotAllowedError'||VA.err==='SecurityError')$va('vaSay').textContent='Autorise le micro dans ton navigateur, puis touche le micro. Tu peux aussi écrire dans la case.';else vaNoVoice();}return;}
   const lvl=rcLevel(RC.stream);VA.vadLvl=lvl;
-  const t0=Date.now();let spoke=false,last=0;
+  const t0=Date.now();let spoke=false,last=0,floor=0,moved=false,lv=lvl;
   VA.vadT=setInterval(async()=>{
     const now=Date.now(),el=now-t0;
-    if(lvl){const v=lvl.get();if(v>.09){spoke=true;last=now;}}
-    const silence=spoke&&now-last>1600,never=!spoke&&el>7000&&lvl,maxed=el>16000,nolvl=!lvl&&el>6500;
+    if(lv){
+      const v=lv.get();
+      if(v>.003)moved=true;
+      if(el<600){floor=Math.max(floor,v);}                       // bruit de fond mesuré au début
+      else{const thr=Math.max(.035,floor*2.5);if(v>thr){spoke=true;last=now;}}   // seuil adapté au micro de CE téléphone
+      if(el>2500&&!moved){lv=null;vaDbg('niveau micro illisible : on enregistre sans détecter le silence');}
+    }
+    const silence=spoke&&now-last>1600,never=!spoke&&el>7000&&lv,maxed=el>16000,nolvl=!lv&&el>6500;
     if(!(silence||never||maxed||nolvl||VA.vadStop))return;
     clearInterval(VA.vadT);VA.vadT=null;try{lvl&&lvl.close();}catch(e){}VA.vadLvl=null;
-    const heard=spoke||!lvl||VA.vadStop;
+    const heard=spoke||!lv||VA.vadStop;vaDbg('fin écoute · parlé='+spoke+' · bruit='+floor.toFixed(3)+' · durée='+el+'ms');
     const res=await rcStop();VA.listening=false;vaMic(false);
     if(!VA.open)return;
     if(!heard||!res.blob){vaNoSpeech();return;}
     $va('vaSay').textContent='… je comprends ta voix';
-    vaAfterStt(await sttServer(res.blob,res.mime));
+    vaAfterStt(await sttServer(res.blob,res.mime),res);
   },100);
 }
-function vaAfterStt(t){
+function vaAfterStt(t,clip){
   if(!VA.open)return;
-  if(t){VA.noHear=0;vaHandle([t]);return;}
+  if(t){VA.noHear=0;vaHandle([t],clip);return;}
   if(VA_STT_ON===false){vaNoVoice();return;}
   VA.noHear++;
   if(VA.noHear>=2){vaNoVoice('Je n\'arrive pas à comprendre ta voix. Écris ta commande ici, je t\'aide.');return;}
   vaAsk('Je n\'ai pas bien compris. Redis-le, s\'il te plaît.');
+}
+// ═══ EXTRAITS AUDIO : un par phrase, liés aux produits qu'ils ont ajoutés ═══
+function vaClipStart(){if(VA.stream&&VA.stream.active&&!RC.rec&&!RC.p){RC.p=rcStart();}}
+async function vaClipStop(){
+  try{if(RC.p){await RC.p;RC.p=null;}return RC.rec?await rcStop():{blob:null,mime:''};}catch(e){RC.p=null;return {blob:null,mime:''};}
+}
+function vaSnap(){return new Map(VA.basket.map(i=>[i,i.qty]));}
+function vaTouched(snap){return VA.basket.filter(i=>!snap.has(i)||snap.get(i)!==i.qty);}
+function vaClipPush(clip,text,touched){
+  if(!clip||!clip.blob||!touched.length)return;
+  (VA.clips=VA.clips||[]).push({blob:clip.blob,mime:clip.mime||'audio/webm',transcript:text,items:touched});
+}
+// Assemble les extraits en UN seul fichier son (WAV, mono) avec un petit silence entre chaque
+async function vaGlue(list){
+  if(list.length===1)return {blob:list[0].blob,mime:list[0].mime};
+  let ac=null;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;ac=new AC();
+    const bufs=[];
+    for(const c of list){
+      const ab=await c.blob.arrayBuffer();
+      bufs.push(await new Promise((ok,ko)=>{const pr=ac.decodeAudioData(ab,ok,ko);if(pr&&pr.catch)pr.catch(ko);}));
+    }
+    const gap=.35,total=bufs.reduce((a,b)=>a+b.duration,0)+gap*(bufs.length-1);
+    const rate=[16000,12000,8000].find(r=>total*r*2+44<=4.7e6);
+    if(!rate)return null;
+    const parts=[];
+    bufs.forEach((b,bi)=>{
+      const n=Math.floor(b.duration*rate),out=new Float32Array(n),ratio=b.sampleRate/rate,chs=[];
+      for(let c=0;c<b.numberOfChannels;c++)chs.push(b.getChannelData(c));
+      for(let i=0;i<n;i++){
+        const a0=Math.floor(i*ratio),a1=Math.max(a0+1,Math.min(chs[0].length,Math.floor((i+1)*ratio)));let sum=0,k=0;
+        for(let c=0;c<chs.length;c++)for(let j=a0;j<a1;j++){sum+=chs[c][j];k++;}
+        out[i]=k?sum/k:0;
+      }
+      parts.push(out);if(bi<bufs.length-1)parts.push(new Float32Array(Math.floor(gap*rate)));
+    });
+    const len=parts.reduce((a,x)=>a+x.length,0),ab=new ArrayBuffer(44+len*2),dv=new DataView(ab);
+    const W=(o,t)=>{for(let i=0;i<t.length;i++)dv.setUint8(o+i,t.charCodeAt(i));};
+    W(0,'RIFF');dv.setUint32(4,36+len*2,true);W(8,'WAVE');W(12,'fmt ');dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,1,true);
+    dv.setUint32(24,rate,true);dv.setUint32(28,rate*2,true);dv.setUint16(32,2,true);dv.setUint16(34,16,true);W(36,'data');dv.setUint32(40,len*2,true);
+    let o=44;for(const x of parts)for(let i=0;i<x.length;i++){const v=Math.max(-1,Math.min(1,x[i]));dv.setInt16(o,v<0?v*0x8000:v*0x7FFF,true);o+=2;}
+    return {blob:new Blob([ab],{type:'audio/wav'}),mime:'audio/wav'};
+  }catch(e){console.warn('Assemblage audio impossible',e);return null;}
+  finally{try{ac&&ac.close();}catch(e){}}
+}
+// Prépare l'audio de la commande : on garde seulement les phrases qui concernent des produits RESTÉS dans le panier, on les colle en un seul fichier
+async function vaPrepClips(){
+  if(VA.prepKey){delete VOICE_CLIPS[VA.prepKey];VA.prepKey=null;}
+  cart.forEach(it=>{it.clips=[];});
+  const keep=(VA.clips||[]).filter(c=>c.items.some(it=>cart.includes(it)));
+  if(!keep.length||!cart.length)return;
+  const key='v'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  const prods=cart.map(it=>it.qty+' '+it.name+(vaMany(it)&&it.size?' '+it.size:'')).join(', ');
+  const g=await vaGlue(keep);
+  if(g&&g.blob){
+    VOICE_CLIPS[key]={blob:g.blob,mime:g.mime,transcript:keep.map(c=>'Client : '+c.transcript).join('\n'),label:'Commande vocale — produits retenus : '+prods};
+    cart[0].clips.push(key);VA.prepKey=key;
+  }else{ // assemblage impossible : on envoie les extraits utiles séparément
+    keep.forEach((c,i)=>{const k=key+i;VOICE_CLIPS[k]={blob:c.blob,mime:c.mime,transcript:'Client : '+c.transcript,label:'Commande vocale — '+c.items.filter(it=>cart.includes(it)).map(it=>it.name).join(', ')};cart[0].clips.push(k);});
+  }
 }
 function vaMicTap(){
   if(HLD.on)return;
@@ -2384,6 +2481,7 @@ function vaMicTap(){
 function vaNoSpeech(){
   if(VA.err==='not-allowed'||VA.err==='service-not-allowed'||VA.err==='NotAllowedError'){$va('vaSay').textContent='Autorise le micro dans ton navigateur, puis appuie sur le micro. Tu peux aussi écrire dans la case.';return;}
   VA.noHear++;
+  if(VA.noHear>=2&&CAN_REC&&VA_STT_ON!==false&&!VA_FORCE_REC&&vaEngine()==='sr'){VA_FORCE_REC=true;VA.noHear=0;vaDiag('essai avec le serveur');vaListen();return;}
   if(VA.noHear>=2){$va('vaSay').textContent='Je ne t\'entends pas. Appuie sur le micro et parle, ou écris dans la case.';return;}
   vaAsk('Je n\'ai rien entendu. Redis-le, s\'il te plaît.');
 }
@@ -2426,7 +2524,7 @@ function vaHoldStart(){
     HLD.p=rcStart().then(ok=>{if(!ok){HLD.on=false;VA.listening=false;vaMic(false);if(VA.err==='NotAllowedError')$va('vaSay').textContent='Autorise le micro dans ton navigateur, puis maintiens le micro.';else vaNoVoice();}return ok;});
     return;
   }
-  HLD.mode='sr';
+  HLD.mode='sr';vaClipStart();
   try{speechSynthesis.cancel();}catch(e){}VA.say++;
   try{if(VA.rec){VA.rec.onend=null;VA.rec.abort();}}catch(e){}clearTimeout(VA.maxT);
   Object.assign(HLD,{on:true,stop:false,text:'',interim:'',retried:false,t0:Date.now()});
@@ -2436,7 +2534,7 @@ function vaHoldStart(){
   vaHoldListen();
 }
 function vaHoldListen(){
-  const r=new _SR();HLD.rec=r;r.lang='fr-FR';r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+  const r=new _SR();HLD.rec=r;r.lang='fr-FR';r.continuous=!IS_ANDROID;r.interimResults=true;r.maxAlternatives=1;
   r.onresult=e=>{let f='',i2='';for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)f+=' '+t;else i2+=' '+t;}HLD.base=(HLD.acc||'');HLD.text=f.trim();HLD.interim=i2.trim();$va('vaHeard').textContent='« '+[HLD.acc||'',HLD.text,HLD.interim].join(' ').replace(/\s+/g,' ').trim()+' »';};
   r.onerror=e=>{VA.err=e.error||'';if(/service-not-allowed|language-not-supported|network/.test(e.error||''))VA_FORCE_REC=true;if(e.error==='not-allowed'||e.error==='service-not-allowed')HLD.denied=true;if(e.error==='audio-capture'&&VA.media&&!HLD.retried){HLD.retried=true;HLD.dropRec=true;}};
   r.onend=()=>{
@@ -2455,7 +2553,7 @@ async function vaHoldEndRec(){
   if(!VA.open)return;
   if(short||!res.blob){$va('vaSay').textContent='Garde le micro appuyé pendant que tu parles.';return;}
   $va('vaSay').textContent='… je comprends ta voix';
-  vaAfterStt(await sttServer(res.blob,res.mime));
+  vaAfterStt(await sttServer(res.blob,res.mime),res);
 }
 function vaHoldEnd(){
   if(!HLD.on||HLD.stop)return;HLD.stop=true;
@@ -2464,20 +2562,21 @@ function vaHoldEnd(){
   try{HLD.rec&&HLD.rec.stop();}catch(e){}
   clearTimeout(HLD.fb);HLD.fb=setTimeout(vaHoldFinish,1800);
 }
-function vaHoldFinish(){
+async function vaHoldFinish(){
   if(!HLD.on)return;HLD.on=false;clearTimeout(HLD.fb);
+  const clipP=vaClipStop();
   try{HLD.rec&&(HLD.rec.onend=null,HLD.rec.abort());}catch(e){}
   const text=[HLD.acc||'',HLD.text,HLD.interim].join(' ').replace(/\s+/g,' ').trim();HLD.acc='';HLD.text='';HLD.interim='';
   VA.listening=false;vaMic(false);
   if(!VA.open)return;
   if(HLD.denied){HLD.denied=false;vaNoSpeech();return;}
   if(!text){$va('vaSay').textContent=VA_FORCE_REC?'Réessaie : maintiens le micro appuyé et parle.':'Je n\'ai rien entendu. Garde le micro appuyé en parlant.';return;}
-  VA.noHear=0;vaHandle([text]);
+  const c=await clipP;VA.noHear=0;vaHandle([text],c);
 }
 (function(){
   const get=e=>e.target.closest&&e.target.closest('#vaMic');
-  document.addEventListener('pointerdown',e=>{if(!get(e)||!VA.open||VA.txt)return;HLD.active=false;clearTimeout(HLD.t);HLD.t=setTimeout(()=>{HLD.active=true;vaHoldStart();},280);});
-  const end=()=>{clearTimeout(HLD.t);if(HLD.active){HLD.active=false;HLD.swallow=true;setTimeout(()=>{HLD.swallow=false;},600);vaHoldEnd();}};
+  document.addEventListener('pointerdown',e=>{if(!get(e)||!VA.open||VA.txt)return;HLD.active=false;HLD.down=true;clearTimeout(HLD.t);HLD.t=setTimeout(async()=>{if(!(await vaMicReady())||!HLD.down)return;HLD.active=true;vaHoldStart();},280);});
+  const end=()=>{HLD.down=false;clearTimeout(HLD.t);if(HLD.active){HLD.active=false;HLD.swallow=true;setTimeout(()=>{HLD.swallow=false;},600);vaHoldEnd();}};
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
   document.addEventListener('click',e=>{if(HLD.swallow&&get(e)){e.preventDefault();e.stopPropagation();HLD.swallow=false;}},true);
   document.addEventListener('contextmenu',e=>{if(get(e))e.preventDefault();});
@@ -2489,7 +2588,7 @@ async function vaOpen(opts){
   if(VA.open||(window.__voiceOff&&!opts.text))return;
   const keep=VA.basket.length>0;
   Object.assign(VA,{open:true,phase:'order',gamme:null,cat:null,pend:[],noHear:0,retried:false,restart:false,listening:false,sending:false,err:'',phoneFail:0,lastQ:''});
-  if(!keep)Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],last:null,telOk:false,offer:null});
+  if(!keep)Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],last:null,telOk:false,offer:null,clips:[]});
   const pc=$va('page-catalog');
   if(pc&&pc.classList.contains('active')){VA.cat=currentCat||null;VA.gamme=window.CUR_GFILTER||null;}
   if(opts.gamme)VA.gamme=opts.gamme;
@@ -2502,7 +2601,7 @@ async function vaOpen(opts){
   vaRender();
   // un seul clic : le navigateur demande lui-même l'autorisation du micro, on n'ajoute aucune étape
   VA.recP=VA.txt?Promise.resolve():vaRecStart();
-  try{fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.llm===false)VA_LLM_OFF=true;if(j&&j.stt===false){VA_STT_ON=false;if(VA.open&&!VA.txt&&vaEngine()==='none'){vaVadCancel();vaNoVoice();}}}).catch(()=>{});}catch(e){}
+  try{fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.llm===false)VA_LLM_OFF=true;if(j&&j.stt===true)VA_STT_ON=true;if(j&&j.stt===false){VA_STT_ON=false;if(VA.open&&!VA.txt&&vaEngine()==='none'){vaVadCancel();vaNoVoice();}}}).catch(()=>{});}catch(e){}
   if(noVoiceNote)setTimeout(()=>vaLog('bot','La voix ne marche pas sur ce téléphone. Pas de problème : écris ta commande ici, je te réponds comme à l\'oral.'),120);
   const ex=PRODS.filter(p=>p.active!==false).slice(0,2).map((p,i)=>(i?'et un ':'deux ')+p.name).join(' ');
   if(opts.silent)return;
@@ -2809,15 +2908,17 @@ const vaTitle=s=>String(s||'').trim().split(/\s+/).map(w=>w.charAt(0).toUpperCas
 function vaFirst(){return (VA.name||'').split(' ')[0]||'';}
 function vaRepeatQ(){vaAsk('Je n\'ai pas bien compris. '+(VA.lastQ||'Dis-moi ce que tu veux.'));}
 // ── applique ce que le client a dit, puis pose la bonne question suivante ──
-async function vaHandle(alts){
+async function vaHandle(alts,clip){
   const text=(alts[0]||'').trim();if(!text){vaNoSpeech();return;}
+  const snap0=vaSnap();
   VA.noHear=0;VA.turns.push(text);if(VA.txt)vaLog('me',text);$va('vaHeard').textContent='« '+text+' »';$va('vaSay').textContent='…';
   let I=await vaLLM(text,alts);
   if(!VA.open)return;
   if(!I)I=vaRuleIntent(text);
-  vaApply(I,text,alts);
+  vaApply(I,text,alts,clip,snap0);
 }
-function vaApply(I,text,alts){
+function vaApply(I,text,alts,clip,snap0){
+  const snap=snap0||vaSnap();
   const R=I.R||{added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
   const phase=VA.phase;
   let fieldSet=false;
@@ -2833,6 +2934,7 @@ function vaApply(I,text,alts){
   }
   const basketChanged=!!(R.added.length||R.changed.length||R.removed.length);
   if(basketChanged)VA.offer=null;
+  vaClipPush(clip,text,vaTouched(snap));
   vaRender();
   const sum=vaSummary(R);
   // 1) « tu t'es trompé sur mon nom » : on redemande
@@ -2947,13 +3049,6 @@ async function vaSend(){
   try{VA.rec&&VA.rec.abort();}catch(e){}
   $va('vaSay').textContent='Envoi de ta commande…';
   await vaRecStop();
-  const newKey=()=>'v'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  cart.forEach(it=>{it.clips=[];(it.hc||[]).forEach(h=>{const k=newKey();VOICE_CLIPS[k]={blob:(h.blob instanceof Blob)?h.blob:null,mime:h.mime,transcript:'Client : '+h.transcript,label:'Commande vocale — '+it.name,qty:it.qty};it.clips.push(k);});});
-  if(cart.length&&(VA.blob||VA.turns.length)){
-    const key=newKey();
-    VOICE_CLIPS[key]={blob:VA.blob,mime:VA.mime,transcript:VA.turns.map(t=>'Client : '+t).join('\n'),label:'Commande vocale complète ('+cart.length+' produit'+(cart.length>1?'s':'')+')'};
-    cart[0].clips.push(key);
-  }
   const nom=VA.name.trim(),tel=VA.tel.replace(/\D/g,''),lieu=VA.lieu.trim();
   let ok=false;
   try{ok=await submitOrder({nom,tel,lieu},null);}catch(e){console.error(e);}
@@ -2978,7 +3073,7 @@ function vaBarRender(){
 }
 function vaReset(afterSend){
   if(!afterSend&&VA.basket.length&&!confirm('Vider ton panier ?'))return;
-  Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],pend:[],last:null,telOk:false,offer:null,blob:null,phase:'order'});
+  Object.assign(VA,{basket:[],name:'',tel:'',lieu:'',turns:[],pend:[],last:null,telOk:false,offer:null,blob:null,clips:[],phase:'order'});
   vaBarRender();if(VA.open)vaRender();
 }
 const QT={on:false,stop:false,text:'',interim:'',rec:null,media:null,stream:null,chunks:[],mime:'',t0:0,retried:false,tm:null};
@@ -2997,17 +3092,18 @@ async function qtStart(){
   else{ if(!QT.media){QT.denied=true;qtFinish();return;} $va('vaQtTxt').textContent='🎤 Je t\'écoute… relâche quand tu as fini'; }
 }
 async function qtRecStart(){
+  if(IS_ANDROID&&vaEngine()==='sr')return;
   try{
     if(!navigator.mediaDevices||!window.MediaRecorder)return;
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});QT.stream=stream;
     const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
     const m=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);QT.mime=m.mimeType||mt||'audio/webm';
     m.ondataavailable=e=>{if(e.data&&e.data.size)QT.chunks.push(e.data);};
-    m.start(1000);QT.media=m;
+    m.start(1000);QT.media=m;vaMicMark();
   }catch(e){QT.media=null;}
 }
 function qtListen(){
-  const r=new _SR();QT.rec=r;r.lang='fr-FR';r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+  const r=new _SR();QT.rec=r;r.lang='fr-FR';r.continuous=!IS_ANDROID;r.interimResults=true;r.maxAlternatives=1;
   r.onresult=e=>{
     let fin='',inter='';
     for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=' '+t;else inter+=' '+t;}
@@ -3051,6 +3147,7 @@ async function qtFinish(){
   qtProcess(text,blob?{blob,mime:QT.mime,transcript:text}:{blob:null,mime:'',transcript:text});
 }
 async function qtProcess(text,clip){
+  const snap0=vaSnap();
   VA.phase='order';VA.pend=[];
   VA.turns.push(text);
   $va('vaBarTxt').textContent='… je réfléchis';$va('vaBar').style.display='flex';
@@ -3060,11 +3157,11 @@ async function qtProcess(text,clip){
   if(needsSheet){ // la phrase demande un échange (nom, numéro, « c'est tout »…) : on ouvre l'assistant et il continue
     VA.holdPending=clip;
     await vaOpen({silent:true});
-    vaAttachClip(clip,I);
-    vaApply(I,text,[text]);
+    vaApply(I,text,[text],clip,snap0);
     return;
   }
   const R=I.R||{added:[],changed:[],removed:[],out:[],notes:[],unknown:[]};
+  const snap=snap0;
   if(I.offer)VA.offer=I.offer;
   if(I.ops){
     I.ops.adds.forEach(a=>vaAddItem(a.p,'',R,a.size,a.qty));
@@ -3072,33 +3169,33 @@ async function qtProcess(text,clip){
     I.ops.setQty.forEach(a=>{const it=VA.basket.find(x=>x.id===a.id);if(it){const p=PRODS.find(x=>x.id===a.id),st=p?vaStock(p,it.size):null;it.qty=Math.min(a.qty,st!==null&&st>0?st:100000);VA.last=it;R.changed.push(vaLabel(it));}});
   }
   const changed=R.added.length||R.changed.length||R.removed.length;
-  if(changed){VA.offer=null;vaAttachClip(clip,I);}
+  if(changed){VA.offer=null;vaClipPush(clip,text,vaTouched(snap));}
   vaBarRender();
   const msg=(I.answer&&!changed?I.answer:vaSummary(R))||I.answer||'';
   if(!msg){toast('Je n\'ai pas compris. Maintiens appuyé et redis-le.');vaBarRender();return;}
   vaToast(msg);
   vaSpeakQuiet(msg);
 }
-function vaAttachClip(clip,I){
-  if(!clip||!VA.last)return;
-  if(!VA.last.hc)Object.defineProperty(VA.last,'hc',{value:[],writable:true,enumerable:false});
-  VA.last.hc.push(clip);
-}
 function vaToast(msg){const t=$va('vaBarTxt');if(t){t.textContent=msg;}$va('vaBar').style.display='flex';clearTimeout(vaToast.t);vaToast.t=setTimeout(vaBarRender,5000);}
 function vaSpeakQuiet(txt){try{speechSynthesis.cancel();const fv=vaFrVoice();if(fv===null)return;const u=new SpeechSynthesisUtterance(txt);u.lang='fr-FR';if(fv)u.voice=fv;u.rate=.95;speechSynthesis.speak(u);}catch(e){}}
 document.addEventListener('pointerdown',e=>{
   const b=e.target.closest&&e.target.closest('.va-hold');
   if(!b||VA.open||window.__voiceOff)return;
-  HOLD.active=false;clearTimeout(HOLD.t);
-  HOLD.t=setTimeout(()=>{HOLD.active=true;qtStart();},380);
+  HOLD.active=false;HOLD.down=true;clearTimeout(HOLD.t);
+  HOLD.t=setTimeout(async()=>{
+    // 1re utilisation : le navigateur va demander l'autorisation du micro, ce qui interrompt le doigt. On ouvre alors l'assistant normal.
+    if(!(await vaMicReady())){if(HOLD.down){HOLD.down=false;HOLD.swallow=true;setTimeout(()=>{HOLD.swallow=false;},600);vaOpen();}return;}
+    if(!HOLD.down)return;
+    HOLD.active=true;qtStart();
+  },380);
 });
-const holdEnd=()=>{clearTimeout(HOLD.t);if(HOLD.active){HOLD.active=false;HOLD.swallow=true;setTimeout(()=>{HOLD.swallow=false;},600);qtStop();}};
+const holdEnd=()=>{HOLD.down=false;clearTimeout(HOLD.t);if(HOLD.active){HOLD.active=false;HOLD.swallow=true;setTimeout(()=>{HOLD.swallow=false;},600);qtStop();}};
 document.addEventListener('pointerup',holdEnd);
 document.addEventListener('pointercancel',holdEnd);
 document.addEventListener('click',e=>{if(HOLD.swallow&&e.target.closest&&e.target.closest('.va-hold')){e.preventDefault();e.stopPropagation();HOLD.swallow=false;}},true);
 document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('.va-hold'))e.preventDefault();});
 // réveille le serveur (il s'endort quand personne ne l'utilise) pour que la voix réponde vite
-setTimeout(()=>{try{if(window.__voiceOff)return;fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.stt===false)VA_STT_ON=false;if(j&&j.llm===false)VA_LLM_OFF=true;}).catch(()=>{});}catch(e){}},2500);
+setTimeout(()=>{try{if(window.__voiceOff)return;fetch(NLU_SERVER+'/api/voice-nlu/ping').then(r=>r.json()).then(j=>{if(j&&j.stt===true)VA_STT_ON=true;if(j&&j.stt===false)VA_STT_ON=false;if(j&&j.llm===false)VA_LLM_OFF=true;}).catch(()=>{});}catch(e){}},2500);
 // petite bulle d'aide, une seule fois par visite
 setTimeout(()=>{try{if(window.__voiceOff||sessionStorage.getItem('va_hint'))return;sessionStorage.setItem('va_hint','1');const h=$va('vaHint');if(!h)return;h.style.display='block';setTimeout(()=>{h.style.display='none';},6500);}catch(e){}},4000);
 
